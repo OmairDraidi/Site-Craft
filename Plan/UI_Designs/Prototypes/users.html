@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiteCraft - Users</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#F7CE7B',
+                            500: '#F6C453',
+                            600: '#D7A94D',
+                        },
+                        black: {
+                            900: '#0A0A0A',
+                            800: '#121212',
+                            700: '#1A1A1A',
+                            600: '#1E1E1E',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0A0A0A; color: #EAEAEA; }
+        .gold-glow { box-shadow: 0 0 15px rgba(246, 196, 83, 0.1); }
+        .gold-gradient-btn {
+            background: linear-gradient(135deg, #FFDFA0, #CBA34E);
+            color: #0A0A0A;
+        }
+        .gold-gradient-btn:hover {
+            background: linear-gradient(135deg, #FFE4AE, #D7A94D);
+            box-shadow: 0 4px 15px rgba(246, 196, 83, 0.3);
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden font-sans bg-black-950">
+
+    <!-- Sidebar (Reused) -->
+    <aside class="w-64 bg-black-900 border-r border-white/5 flex flex-col shrink-0">
+        <div class="h-16 flex items-center px-6 border-b border-white/5">
+            <div class="w-8 h-8 bg-gold-500 rounded-lg flex items-center justify-center mr-3">
+                <span class="text-black font-bold text-xl font-heading">S</span>
+            </div>
+            <span class="text-xl font-bold font-heading text-white">SiteCraft</span>
+        </div>
+        <nav class="flex-1 py-6 px-3 space-y-1">
+            <a href="dashboard.html" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="templates_gallery.html" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                <span class="font-medium">Templates</span>
+            </a>
+            <a href="builder.html" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                <span class="font-medium">Builder</span>
+            </a>
+            <a href="domains.html" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                <span class="font-medium">Domains</span>
+            </a>
+             <a href="#" class="flex items-center px-3 py-3 rounded-lg bg-gold-500/10 text-gold-500 group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <span class="font-medium">Users</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden bg-black-950">
+        <!-- Topbar -->
+        <header class="h-16 bg-black-800 border-b border-white/5 flex items-center justify-between px-8">
+            <h1 class="text-xl font-heading font-semibold text-white">Users Management</h1>
+            <button class="gold-gradient-btn px-4 py-2 rounded-lg font-medium text-sm flex items-center shadow-lg shadow-gold-500/20">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                Add New User
+            </button>
+        </header>
+
+        <!-- Content -->
+        <div class="flex-1 overflow-y-auto p-8">
+            
+            <!-- Filters -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <input type="text" placeholder="Search users..." class="bg-black-700 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-gold-500 w-64">
+                        <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <select class="bg-black-700 border border-white/10 rounded-lg px-4 py-2 text-sm text-gray-300 focus:border-gold-500 outline-none">
+                        <option>All Roles</option>
+                        <option>Admin</option>
+                        <option>Editor</option>
+                        <option>Viewer</option>
+                    </select>
+                    <select class="bg-black-700 border border-white/10 rounded-lg px-4 py-2 text-sm text-gray-300 focus:border-gold-500 outline-none">
+                        <option>All Status</option>
+                        <option>Active</option>
+                        <option>Pending</option>
+                        <option>Suspended</option>
+                    </select>
+                </div>
+                <div class="text-sm text-gray-400">
+                    Showing <span class="text-white font-medium">3</span> of <span class="text-white font-medium">14</span> users
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="bg-black-700 rounded-2xl border border-white/5 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-black-800 text-gray-400 text-sm border-b border-white/5">
+                            <th class="px-6 py-4 font-medium">User</th>
+                            <th class="px-6 py-4 font-medium">Role</th>
+                            <th class="px-6 py-4 font-medium">Status</th>
+                            <th class="px-6 py-4 font-medium">Last Active</th>
+                            <th class="px-6 py-4 font-medium">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <!-- User 1 -->
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-gold-500/20 text-gold-500 flex items-center justify-center font-bold mr-3 border border-gold-500/30">
+                                        JD
+                                    </div>
+                                    <div>
+                                        <p class="text-white font-medium">John Doe</p>
+                                        <p class="text-xs text-gray-500">john@sitecraft.com</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 bg-black-800 text-gray-300 text-xs rounded border border-white/10">Admin</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 bg-green-500/10 text-green-500 text-xs rounded-full border border-green-500/20">Active</span>
+                            </td>
+                            <td class="px-6 py-4 text-gray-400 text-sm">2 mins ago</td>
+                            <td class="px-6 py-4">
+                                <button class="text-gray-400 hover:text-white p-1 rounded hover:bg-white/10">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- User 2 -->
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-gray-700 text-gray-300 flex items-center justify-center font-bold mr-3 border border-white/10">
+                                        AS
+                                    </div>
+                                    <div>
+                                        <p class="text-white font-medium">Alice Smith</p>
+                                        <p class="text-xs text-gray-500">alice@example.com</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 bg-black-800 text-gray-300 text-xs rounded border border-white/10">Editor</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 bg-yellow-500/10 text-yellow-500 text-xs rounded-full border border-yellow-500/20">Pending</span>
+                            </td>
+                            <td class="px-6 py-4 text-gray-400 text-sm">Invited</td>
+                            <td class="px-6 py-4">
+                                <button class="text-gray-400 hover:text-white p-1 rounded hover:bg-white/10">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- User 3 -->
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-gray-700 text-gray-300 flex items-center justify-center font-bold mr-3 border border-white/10">
+                                        MK
+                                    </div>
+                                    <div>
+                                        <p class="text-white font-medium">Mike K.</p>
+                                        <p class="text-xs text-gray-500">mike@example.com</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 bg-black-800 text-gray-300 text-xs rounded border border-white/10">Viewer</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 bg-red-500/10 text-red-500 text-xs rounded-full border border-red-500/20">Suspended</span>
+                            </td>
+                            <td class="px-6 py-4 text-gray-400 text-sm">2 days ago</td>
+                            <td class="px-6 py-4">
+                                <button class="text-gray-400 hover:text-white p-1 rounded hover:bg-white/10">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>

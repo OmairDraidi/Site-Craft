@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiteCraft - Billing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#F7CE7B',
+                            500: '#F6C453',
+                            600: '#D7A94D',
+                        },
+                        black: {
+                            900: '#0A0A0A',
+                            800: '#121212',
+                            700: '#1A1A1A',
+                            600: '#1E1E1E',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0A0A0A; color: #EAEAEA; }
+        .gold-glow { box-shadow: 0 0 15px rgba(246, 196, 83, 0.1); }
+        .gold-gradient-btn {
+            background: linear-gradient(135deg, #FFDFA0, #CBA34E);
+            color: #0A0A0A;
+        }
+        .gold-gradient-btn:hover {
+            background: linear-gradient(135deg, #FFE4AE, #D7A94D);
+            box-shadow: 0 4px 15px rgba(246, 196, 83, 0.3);
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden font-sans bg-black-950">
+
+    <!-- Sidebar (Reused) -->
+    <aside class="w-64 bg-black-900 border-r border-white/5 flex flex-col shrink-0">
+        <div class="h-16 flex items-center px-6 border-b border-white/5">
+            <div class="w-8 h-8 bg-gold-500 rounded-lg flex items-center justify-center mr-3">
+                <span class="text-black font-bold text-xl font-heading">S</span>
+            </div>
+            <span class="text-xl font-bold font-heading text-white">SiteCraft</span>
+        </div>
+        <nav class="flex-1 py-6 px-3 space-y-1">
+            <a href="dashboard.html" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="templates_gallery.html" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                <span class="font-medium">Templates</span>
+            </a>
+            <a href="builder.html" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                <span class="font-medium">Builder</span>
+            </a>
+            <a href="domains.html" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                <span class="font-medium">Domains</span>
+            </a>
+            <a href="users.html" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <span class="font-medium">Users</span>
+            </a>
+            <a href="#" class="flex items-center px-3 py-3 rounded-lg bg-gold-500/10 text-gold-500 group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span class="font-medium">Billing</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden bg-black-950">
+        <!-- Topbar -->
+        <header class="h-16 bg-black-800 border-b border-white/5 flex items-center justify-between px-8">
+            <h1 class="text-xl font-heading font-semibold text-white">Billing & Payments</h1>
+        </header>
+
+        <!-- Content -->
+        <div class="flex-1 overflow-y-auto p-8">
+            
+            <div class="grid grid-cols-3 gap-8 mb-8">
+                <!-- Current Plan -->
+                <div class="col-span-2 bg-black-700 rounded-2xl border border-white/5 p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-gold-500/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                    
+                    <div class="flex justify-between items-start mb-6 relative z-10">
+                        <div>
+                            <p class="text-sm text-gray-400 uppercase tracking-wider font-semibold mb-1">Current Plan</p>
+                            <h2 class="text-3xl font-heading font-bold text-white">Pro Plan</h2>
+                        </div>
+                        <span class="px-3 py-1 bg-green-500/10 text-green-500 text-sm font-medium rounded-full border border-green-500/20">Active</span>
+                    </div>
+
+                    <div class="flex items-end space-x-2 mb-8 relative z-10">
+                        <span class="text-4xl font-bold text-gold-500">$29</span>
+                        <span class="text-gray-400 mb-1">/ month</span>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-6 mb-8 relative z-10">
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">Sites</p>
+                            <p class="text-white font-medium">3 / 5</p>
+                            <div class="w-full h-1 bg-black-900 rounded-full mt-2">
+                                <div class="w-3/5 h-full bg-gold-500 rounded-full"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">Storage</p>
+                            <p class="text-white font-medium">12GB / 50GB</p>
+                            <div class="w-full h-1 bg-black-900 rounded-full mt-2">
+                                <div class="w-1/4 h-full bg-gold-500 rounded-full"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">Bandwidth</p>
+                            <p class="text-white font-medium">45GB / 100GB</p>
+                            <div class="w-full h-1 bg-black-900 rounded-full mt-2">
+                                <div class="w-1/2 h-full bg-gold-500 rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-4 relative z-10">
+                        <button class="gold-gradient-btn px-6 py-2.5 rounded-lg font-medium text-sm shadow-lg shadow-gold-500/20">Upgrade Plan</button>
+                        <button class="px-6 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white font-medium text-sm hover:bg-white/10 transition-colors">Cancel Subscription</button>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="bg-black-700 rounded-2xl border border-white/5 p-8">
+                    <h3 class="text-lg font-heading font-semibold text-white mb-6">Payment Method</h3>
+                    
+                    <div class="flex items-center p-4 bg-black-800 rounded-xl border border-white/5 mb-6">
+                        <div class="w-12 h-8 bg-white rounded flex items-center justify-center mr-4">
+                            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 10C2 7.17157 2 5.75736 2.87868 4.87868C3.75736 4 5.17157 4 8 4H16C18.8284 4 20.2426 4 21.1213 4.87868C22 5.75736 22 7.17157 22 10H2Z" fill="#1A1F71"/><path d="M2 16C2 18.8284 2 20.2426 2.87868 21.1213C3.75736 22 5.17157 22 8 22H16C18.8284 22 20.2426 22 21.1213 21.1213C22 20.2426 22 18.8284 22 16V14H2V16Z" fill="#F79E1B"/><path d="M2 10H22V14H2V10Z" fill="#2E2E2E"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium">Visa ending in 4242</p>
+                            <p class="text-xs text-gray-500">Expires 12/28</p>
+                        </div>
+                    </div>
+
+                    <button class="w-full py-2.5 border border-white/10 rounded-lg text-gray-300 text-sm font-medium hover:text-white hover:border-white/20 transition-colors">
+                        Update Payment Method
+                    </button>
+                </div>
+            </div>
+
+            <!-- Invoice History -->
+            <div class="bg-black-700 rounded-2xl border border-white/5 overflow-hidden">
+                <div class="p-6 border-b border-white/5">
+                    <h3 class="text-lg font-heading font-semibold text-white">Invoice History</h3>
+                </div>
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-black-800 text-gray-400 text-sm border-b border-white/5">
+                            <th class="px-6 py-4 font-medium">Invoice ID</th>
+                            <th class="px-6 py-4 font-medium">Date</th>
+                            <th class="px-6 py-4 font-medium">Amount</th>
+                            <th class="px-6 py-4 font-medium">Status</th>
+                            <th class="px-6 py-4 font-medium">Download</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 text-white font-mono text-sm">INV-2024-001</td>
+                            <td class="px-6 py-4 text-gray-400 text-sm">Oct 1, 2025</td>
+                            <td class="px-6 py-4 text-white font-medium">$29.00</td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 bg-green-500/10 text-green-500 text-xs rounded-full border border-green-500/20">Paid</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <button class="text-gray-400 hover:text-gold-500 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 text-white font-mono text-sm">INV-2024-002</td>
+                            <td class="px-6 py-4 text-gray-400 text-sm">Sep 1, 2025</td>
+                            <td class="px-6 py-4 text-white font-medium">$29.00</td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 bg-green-500/10 text-green-500 text-xs rounded-full border border-green-500/20">Paid</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <button class="text-gray-400 hover:text-gold-500 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiteCraft - Templates Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#F7CE7B',
+                            500: '#F6C453',
+                            600: '#D7A94D',
+                        },
+                        black: {
+                            900: '#0A0A0A',
+                            800: '#121212',
+                            700: '#1A1A1A',
+                            600: '#1E1E1E',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0A0A0A; color: #EAEAEA; }
+        .gold-glow { box-shadow: 0 0 15px rgba(246, 196, 83, 0.1); }
+        .gold-gradient-btn {
+            background: linear-gradient(135deg, #FFDFA0, #CBA34E);
+            color: #0A0A0A;
+        }
+        .gold-gradient-btn:hover {
+            background: linear-gradient(135deg, #FFE4AE, #D7A94D);
+            box-shadow: 0 4px 15px rgba(246, 196, 83, 0.3);
+        }
+        .template-card:hover .overlay { opacity: 1; }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden font-sans bg-black-950">
+
+    <!-- Topbar -->
+    <header class="h-20 bg-black-800 border-b border-white/5 flex items-center justify-between px-8 shrink-0">
+        <div class="flex items-center">
+            <div class="w-8 h-8 bg-gold-500 rounded-lg flex items-center justify-center mr-3">
+                <span class="text-black font-bold text-xl font-heading">S</span>
+            </div>
+            <h1 class="text-2xl font-heading font-semibold text-white">Templates Gallery</h1>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <!-- Search -->
+            <div class="relative">
+                <input type="text" placeholder="Search templates..." class="bg-black-600 border border-white/10 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-gold-500 w-80">
+                <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+
+            <button class="px-4 py-2.5 bg-black-600 border border-white/10 rounded-lg text-white hover:border-gold-500 transition-colors flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                Filters
+            </button>
+
+            <button class="gold-gradient-btn px-6 py-2.5 rounded-lg font-medium font-heading transition-transform active:scale-95">
+                Upload Template
+            </button>
+        </div>
+    </header>
+
+    <!-- Filters Row -->
+    <div class="h-16 border-b border-white/5 flex items-center px-8 space-x-4 overflow-x-auto shrink-0 bg-black-900/50 backdrop-blur-sm">
+        <span class="text-sm text-gray-400 font-medium mr-2">Categories:</span>
+        <button class="px-4 py-1.5 rounded-full bg-gold-500 text-black text-sm font-medium border border-gold-500">All</button>
+        <button class="px-4 py-1.5 rounded-full bg-black-700 text-gray-300 text-sm font-medium border border-white/10 hover:border-gold-500 hover:text-white transition-colors">Education</button>
+        <button class="px-4 py-1.5 rounded-full bg-black-700 text-gray-300 text-sm font-medium border border-white/10 hover:border-gold-500 hover:text-white transition-colors">Business</button>
+        <button class="px-4 py-1.5 rounded-full bg-black-700 text-gray-300 text-sm font-medium border border-white/10 hover:border-gold-500 hover:text-white transition-colors">Portfolio</button>
+        <button class="px-4 py-1.5 rounded-full bg-black-700 text-gray-300 text-sm font-medium border border-white/10 hover:border-gold-500 hover:text-white transition-colors">E-commerce</button>
+        <button class="px-4 py-1.5 rounded-full bg-black-700 text-gray-300 text-sm font-medium border border-white/10 hover:border-gold-500 hover:text-white transition-colors">Agency</button>
+        
+        <div class="h-6 w-px bg-white/10 mx-4"></div>
+        
+        <button class="text-sm text-gray-400 hover:text-gold-500 flex items-center">
+            Sort by: Popular
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+    </div>
+
+    <!-- Grid Content -->
+    <main class="flex-1 overflow-y-auto p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            
+            <!-- Template Card 1 -->
+            <div class="template-card group relative bg-black-700 rounded-2xl overflow-hidden border border-white/5 hover:border-gold-500/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(246,196,83,0.15)]">
+                <!-- Image Placeholder -->
+                <div class="h-48 bg-black-600 relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-gray-500">
+                        <svg class="w-12 h-12 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <!-- Favorite Icon -->
+                    <button class="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur rounded-full text-white hover:text-gold-500 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </button>
+                    <!-- Overlay -->
+                    <div class="overlay absolute inset-0 bg-black/80 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center space-y-3">
+                        <button class="px-6 py-2 rounded-lg border border-gold-500 text-gold-500 font-medium hover:bg-gold-500 hover:text-black transition-colors">Preview</button>
+                        <button class="px-6 py-2 rounded-lg bg-gold-500 text-black font-medium hover:bg-gold-400 transition-colors">Use Template</button>
+                    </div>
+                </div>
+                <!-- Info -->
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-heading font-semibold text-white">Modern Academy</h3>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-gold-500 text-black">PREMIUM</span>
+                    </div>
+                    <p class="text-sm text-gray-400">Education • Learning</p>
+                </div>
+            </div>
+
+            <!-- Template Card 2 -->
+            <div class="template-card group relative bg-black-700 rounded-2xl overflow-hidden border border-white/5 hover:border-gold-500/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(246,196,83,0.15)]">
+                <div class="h-48 bg-black-600 relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-gray-500">
+                        <svg class="w-12 h-12 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <button class="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur rounded-full text-white hover:text-gold-500 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </button>
+                    <div class="overlay absolute inset-0 bg-black/80 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center space-y-3">
+                        <button class="px-6 py-2 rounded-lg border border-gold-500 text-gold-500 font-medium hover:bg-gold-500 hover:text-black transition-colors">Preview</button>
+                        <button class="px-6 py-2 rounded-lg bg-gold-500 text-black font-medium hover:bg-gold-400 transition-colors">Use Template</button>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-heading font-semibold text-white">Agency X</h3>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-gray-600 text-gray-300">FREE</span>
+                    </div>
+                    <p class="text-sm text-gray-400">Business • Agency</p>
+                </div>
+            </div>
+
+            <!-- Template Card 3 -->
+            <div class="template-card group relative bg-black-700 rounded-2xl overflow-hidden border border-white/5 hover:border-gold-500/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(246,196,83,0.15)]">
+                <div class="h-48 bg-black-600 relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-gray-500">
+                        <svg class="w-12 h-12 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <button class="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur rounded-full text-white hover:text-gold-500 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </button>
+                    <div class="overlay absolute inset-0 bg-black/80 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center space-y-3">
+                        <button class="px-6 py-2 rounded-lg border border-gold-500 text-gold-500 font-medium hover:bg-gold-500 hover:text-black transition-colors">Preview</button>
+                        <button class="px-6 py-2 rounded-lg bg-gold-500 text-black font-medium hover:bg-gold-400 transition-colors">Use Template</button>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-heading font-semibold text-white">Dev Portfolio</h3>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-gold-500 text-black">PREMIUM</span>
+                    </div>
+                    <p class="text-sm text-gray-400">Portfolio • Personal</p>
+                </div>
+            </div>
+
+            <!-- Template Card 4 -->
+            <div class="template-card group relative bg-black-700 rounded-2xl overflow-hidden border border-white/5 hover:border-gold-500/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(246,196,83,0.15)]">
+                <div class="h-48 bg-black-600 relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-gray-500">
+                        <svg class="w-12 h-12 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <button class="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur rounded-full text-white hover:text-gold-500 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </button>
+                    <div class="overlay absolute inset-0 bg-black/80 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center space-y-3">
+                        <button class="px-6 py-2 rounded-lg border border-gold-500 text-gold-500 font-medium hover:bg-gold-500 hover:text-black transition-colors">Preview</button>
+                        <button class="px-6 py-2 rounded-lg bg-gold-500 text-black font-medium hover:bg-gold-400 transition-colors">Use Template</button>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-heading font-semibold text-white">Shop Lite</h3>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold bg-gray-600 text-gray-300">FREE</span>
+                    </div>
+                    <p class="text-sm text-gray-400">E-commerce • Store</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-center mt-12 mb-8">
+            <nav class="flex space-x-2">
+                <button class="w-10 h-10 rounded-lg bg-black-700 border border-white/10 text-gray-400 hover:text-white hover:border-gold-500 transition-colors flex items-center justify-center">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button class="w-10 h-10 rounded-lg bg-gold-500 text-black font-bold flex items-center justify-center">1</button>
+                <button class="w-10 h-10 rounded-lg bg-black-700 border border-white/10 text-gray-400 hover:text-white hover:border-gold-500 transition-colors flex items-center justify-center">2</button>
+                <button class="w-10 h-10 rounded-lg bg-black-700 border border-white/10 text-gray-400 hover:text-white hover:border-gold-500 transition-colors flex items-center justify-center">3</button>
+                <button class="w-10 h-10 rounded-lg bg-black-700 border border-white/10 text-gray-400 hover:text-white hover:border-gold-500 transition-colors flex items-center justify-center">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </nav>
+        </div>
+    </main>
+
+</body>
+</html>

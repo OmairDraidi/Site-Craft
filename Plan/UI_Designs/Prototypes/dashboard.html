@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiteCraft - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#F7CE7B',
+                            500: '#F6C453',
+                            600: '#D7A94D',
+                        },
+                        black: {
+                            900: '#0A0A0A',
+                            800: '#121212',
+                            700: '#1A1A1A',
+                            600: '#1E1E1E',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0A0A0A; color: #EAEAEA; }
+        .gold-glow { box-shadow: 0 0 15px rgba(246, 196, 83, 0.1); }
+        .gold-text-gradient {
+            background: linear-gradient(135deg, #FFDFA0, #CBA34E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden font-sans">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-black-900 border-r border-white/5 flex flex-col">
+        <!-- Logo -->
+        <div class="h-16 flex items-center px-6 border-b border-white/5">
+            <div class="w-8 h-8 bg-gold-500 rounded-lg flex items-center justify-center mr-3">
+                <span class="text-black font-bold text-xl font-heading">S</span>
+            </div>
+            <span class="text-xl font-bold font-heading text-white">SiteCraft</span>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 py-6 px-3 space-y-1">
+            <a href="#" class="flex items-center px-3 py-3 rounded-lg bg-gold-500/10 text-gold-500 group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="#" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                <span class="font-medium">Templates</span>
+            </a>
+            <a href="#" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                <span class="font-medium">Builder</span>
+            </a>
+            <a href="#" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <span class="font-medium">Users</span>
+            </a>
+            <a href="#" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span class="font-medium">Payments</span>
+            </a>
+            <a href="#" class="flex items-center px-3 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-colors group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span class="font-medium">Settings</span>
+            </a>
+        </nav>
+
+        <!-- User Profile -->
+        <div class="p-4 border-t border-white/5">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-gray-700 border border-gold-500/30"></div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-white">Admin User</p>
+                    <p class="text-xs text-gray-500">admin@sitecraft.com</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden bg-black-950 relative">
+        <!-- Topbar -->
+        <header class="h-16 bg-black-800 border-b border-white/5 flex items-center justify-between px-8">
+            <h1 class="text-xl font-heading font-semibold text-white">Dashboard Overview</h1>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Search -->
+                <div class="relative">
+                    <input type="text" placeholder="Search..." class="bg-black-600 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-gold-500 transition-colors w-64">
+                    <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+
+                <!-- Notifications -->
+                <button class="text-gray-400 hover:text-gold-500 transition-colors relative">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    <span class="absolute top-0 right-0 w-2 h-2 bg-gold-500 rounded-full"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Content Scrollable -->
+        <div class="flex-1 overflow-y-auto p-8">
+            
+            <!-- Stats Row -->
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <!-- Card 1 -->
+                <div class="bg-black-700 rounded-2xl p-6 border border-white/5 gold-glow hover:border-gold-500/30 transition-colors">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 bg-gold-500/10 rounded-lg">
+                            <svg class="w-6 h-6 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </div>
+                        <span class="px-2 py-1 bg-green-500/10 text-green-500 text-xs font-medium rounded-full">+12%</span>
+                    </div>
+                    <h3 class="text-gray-400 text-sm font-medium mb-1">Total Users</h3>
+                    <p class="text-2xl font-bold text-white font-heading">10,482</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-black-700 rounded-2xl p-6 border border-white/5 gold-glow hover:border-gold-500/30 transition-colors">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 bg-gold-500/10 rounded-lg">
+                            <svg class="w-6 h-6 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                        </div>
+                        <span class="px-2 py-1 bg-green-500/10 text-green-500 text-xs font-medium rounded-full">+3%</span>
+                    </div>
+                    <h3 class="text-gray-400 text-sm font-medium mb-1">Active Sites</h3>
+                    <p class="text-2xl font-bold text-white font-heading">641</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-black-700 rounded-2xl p-6 border border-white/5 gold-glow hover:border-gold-500/30 transition-colors">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 bg-gold-500/10 rounded-lg">
+                            <svg class="w-6 h-6 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                        </div>
+                        <span class="px-2 py-1 bg-red-500/10 text-red-500 text-xs font-medium rounded-full">-4%</span>
+                    </div>
+                    <h3 class="text-gray-400 text-sm font-medium mb-1">Templates Used</h3>
+                    <p class="text-2xl font-bold text-white font-heading">2,912</p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-black-700 rounded-2xl p-6 border border-white/5 gold-glow hover:border-gold-500/30 transition-colors">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 bg-gold-500/10 rounded-lg">
+                            <svg class="w-6 h-6 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <span class="px-2 py-1 bg-green-500/10 text-green-500 text-xs font-medium rounded-full">+8%</span>
+                    </div>
+                    <h3 class="text-gray-400 text-sm font-medium mb-1">Revenue</h3>
+                    <p class="text-2xl font-bold text-white font-heading">$84,500</p>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-3 gap-6 mb-8">
+                <!-- Line Chart -->
+                <div class="col-span-2 bg-black-700 rounded-2xl p-6 border border-white/5">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-lg font-heading font-semibold text-white">Users Growth</h3>
+                            <p class="text-sm text-gray-400">Last 30 days</p>
+                        </div>
+                    </div>
+                    <!-- Mock Chart Area -->
+                    <div class="h-64 w-full flex items-end justify-between space-x-2 px-4 border-b border-l border-white/10 relative">
+                        <!-- Grid Lines -->
+                        <div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-10">
+                            <div class="w-full h-px bg-white"></div>
+                            <div class="w-full h-px bg-white"></div>
+                            <div class="w-full h-px bg-white"></div>
+                            <div class="w-full h-px bg-white"></div>
+                        </div>
+                        <!-- Gold Line (SVG) -->
+                        <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+                            <path d="M0,200 C50,150 100,180 150,100 C200,50 250,120 300,80 C350,40 400,60 450,20 L450,250 L0,250 Z" fill="url(#goldGradient)" fill-opacity="0.1" />
+                            <path d="M0,200 C50,150 100,180 150,100 C200,50 250,120 300,80 C350,40 400,60 450,20" stroke="#F6C453" stroke-width="3" fill="none" />
+                            <defs>
+                                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#F6C453" />
+                                    <stop offset="100%" stop-color="#0A0A0A" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Bar Chart -->
+                <div class="bg-black-700 rounded-2xl p-6 border border-white/5">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-heading font-semibold text-white">Revenue</h3>
+                        <div class="flex space-x-2">
+                            <span class="px-2 py-1 bg-gold-500 text-black text-xs font-bold rounded cursor-pointer">7d</span>
+                            <span class="px-2 py-1 bg-black-600 text-gray-400 text-xs font-medium rounded cursor-pointer hover:bg-black-500">30d</span>
+                        </div>
+                    </div>
+                    <!-- Mock Bars -->
+                    <div class="h-64 flex items-end justify-between space-x-3">
+                        <div class="w-full bg-black-600 rounded-t-sm h-1/3 hover:bg-gold-500 transition-colors"></div>
+                        <div class="w-full bg-black-600 rounded-t-sm h-1/2 hover:bg-gold-500 transition-colors"></div>
+                        <div class="w-full bg-gold-500 rounded-t-sm h-3/4 shadow-[0_0_10px_rgba(246,196,83,0.3)]"></div>
+                        <div class="w-full bg-black-600 rounded-t-sm h-2/3 hover:bg-gold-500 transition-colors"></div>
+                        <div class="w-full bg-black-600 rounded-t-sm h-1/2 hover:bg-gold-500 transition-colors"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity & Table -->
+            <div class="bg-black-700 rounded-2xl border border-white/5 overflow-hidden">
+                <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                    <h3 class="text-lg font-heading font-semibold text-white">Recent Users</h3>
+                    <button class="text-gold-500 text-sm font-medium hover:underline">View All</button>
+                </div>
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-black-800 text-gray-400 text-sm border-b border-white/5">
+                            <th class="px-6 py-4 font-medium">User</th>
+                            <th class="px-6 py-4 font-medium">Email</th>
+                            <th class="px-6 py-4 font-medium">Status</th>
+                            <th class="px-6 py-4 font-medium">Plan</th>
+                            <th class="px-6 py-4 font-medium">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-600 mr-3"></div>
+                                <span class="text-white font-medium">Ahmed Ali</span>
+                            </td>
+                            <td class="px-6 py-4 text-gray-400">ahmed@example.com</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 bg-green-500/10 text-green-500 text-xs rounded-full border border-green-500/20">Active</span></td>
+                            <td class="px-6 py-4 text-white">Pro Plan</td>
+                            <td class="px-6 py-4 text-gray-400 hover:text-white cursor-pointer">...</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-600 mr-3"></div>
+                                <span class="text-white font-medium">Sarah Smith</span>
+                            </td>
+                            <td class="px-6 py-4 text-gray-400">sarah@example.com</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 bg-yellow-500/10 text-yellow-500 text-xs rounded-full border border-yellow-500/20">Pending</span></td>
+                            <td class="px-6 py-4 text-white">Starter</td>
+                            <td class="px-6 py-4 text-gray-400 hover:text-white cursor-pointer">...</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-600 mr-3"></div>
+                                <span class="text-white font-medium">John Doe</span>
+                            </td>
+                            <td class="px-6 py-4 text-gray-400">john@example.com</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 bg-red-500/10 text-red-500 text-xs rounded-full border border-red-500/20">Banned</span></td>
+                            <td class="px-6 py-4 text-white">Free</td>
+                            <td class="px-6 py-4 text-gray-400 hover:text-white cursor-pointer">...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
