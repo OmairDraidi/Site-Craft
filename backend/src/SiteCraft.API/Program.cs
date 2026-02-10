@@ -1,16 +1,22 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using SiteCraft.Domain.Interfaces;
+using SiteCraft.Application.Interfaces;
+using SiteCraft.Infrastructure.Data;
 using SiteCraft.Infrastructure.Services;
 using SiteCraft.Infrastructure.Middleware;
+using SiteCraft.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure Kestrel to use port 5000
-builder.WebHost.UseUrls("http://localhost:5000");
+// Configure Kestrel - Docker will override with environment variable
+// builder.WebHost.UseUrls("http://localhost:5000"); // Commented for Docker compatibility
 
 // ============================================
 // Serilog Configuration
@@ -31,15 +37,45 @@ builder.Host.UseSerilog();
 // Add Controllers
 builder.Services.AddControllers();
 
+// Add FluentValidation
+builder.Services.AddValidatorsFromAssemblyContaining<SiteCraft.Application.Validators.RegisterRequestValidator>();
+builder.Services.AddFluentValidationAutoValidation();
+
 // Add Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "SiteCraft API",
         Version = "v1",
         Description = "AI-Powered Website Builder Platform API"
+    });
+    
+    // Add JWT Authentication to Swagger
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter 'Bearer' [space] and then your valid token"
+    });
+    
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
     });
 });
 
@@ -57,13 +93,21 @@ builder.Services.AddCors(options =>
 
 // Add Database Context (MySQL)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<SiteCraft.Infrastructure.Data.SiteCraftDbContext>(options =>
+builder.Services.AddDbContext<SiteCraftDbContext>(options =>
 {
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 21)));
 });
 
 // Add Tenant Service (Multi-Tenancy)
 builder.Services.AddScoped<ITenantService, TenantService>();
+
+// Add Repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
+// Add Application Services
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Add Redis (StackExchange.Redis)
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -105,6 +149,22 @@ builder.Services.AddHealthChecks();
 // ============================================
 
 var app = builder.Build();
+
+// Auto-migrate database on startup
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<SiteCraftDbContext>();
+        Log.Information("Applying database migrations...");
+        dbContext.Database.Migrate();
+        Log.Information("Database migrations applied successfully");
+    }
+    catch (Exception ex)
+    {
+        Log.Error(ex, "An error occurred while migrating the database");
+    }
+}
 
 // Development Environment
 if (app.Environment.IsDevelopment())

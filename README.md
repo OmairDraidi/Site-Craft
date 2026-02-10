@@ -2,6 +2,8 @@
 
 **SiteCraft** is a modern, multi-tenant SaaS platform that empowers users to create professional websites using AI-powered tools and customizable templates. Built for agencies, freelancers, and small businesses, SiteCraft combines powerful backend architecture with an intuitive drag-and-drop builder.
 
+**Current Status:** ✅ Phase 6 Complete - Authentication System Fully Implemented
+
 ---
 
 ## 🚀 Tech Stack
@@ -9,100 +11,175 @@
 - **Frontend:** React 19 + Vite + TypeScript + Tailwind CSS
 - **Backend:** ASP.NET Core 8 + Clean Architecture
 - **Database:** MySQL 8 + Redis (caching)
-- **AI/ML:** OpenAI API (GPT-4) for content generation
-- **Deployment:** Docker + Docker Compose on VPS (Contabo/Hetzner)
-- **Authentication:** JWT + Multi-tenant isolation
+- **Authentication:** JWT + BCrypt + Refresh Tokens
+- **Multi-Tenancy:** X-Tenant-Id header-based isolation
+- **Deployment:** Docker + Docker Compose
+
+---
+
+## ✅ Implemented Features (Phase 6)
+
+### Backend
+- ✅ JWT-based authentication with refresh tokens
+- ✅ User registration & login with tenant context
+- ✅ Multi-tenancy system (default, demo, companyb tenants)
+- ✅ Password hashing with BCrypt
+- ✅ RESTful API with Swagger documentation
+- ✅ Clean Architecture (Domain, Application, Infrastructure, API)
+
+### Frontend
+- ✅ Premium Black & Gold UI design
+- ✅ Login & Registration pages with validation
+- ✅ Protected routes with auth context
+- ✅ Dashboard with user information
+- ✅ Token management & auto-refresh
+- ✅ Error handling & user feedback
 
 ---
 
 ## 📁 Project Structure
 
 ```
-Project/
-├── .ai/                        # AI context & prompts (for AI-assisted development)
-│   ├── context/                # Project context files for AI agents
-│   └── prompts/                # Organized prompt templates
-│       ├── warmup/             # Session warmup prompts
-│       ├── features/           # Feature-specific prompts
-│       └── debugging/          # Debugging prompts
-├── plans/                      # Project planning & documentation
-│   ├── active/                 # Current work plans with progress tracking
-│   ├── completed/              # Completed phase documentation
-│   ├── Architecture.md         # Technical architecture
-│   ├── SiteCraft_PRD.md        # Product Requirements Document
-│   ├── project.md              # Project overview & roadmap
-│   └── SiteCraft_Brand_Identity.md  # Brand guidelines
-├── docs/                       # User & developer documentation (to be created)
-├── ref/                        # Reference guides & best practices
-├── src/                        # Source code (Phase 7+, to be created)
-├── tests/                      # Test files (to be created)
-└── README.md                   # This file
+SiteCraft/
+├── backend/
+│   ├── src/
+│   │   ├── SiteCraft.API/          # Controllers & Program setup
+│   │   ├── SiteCraft.Application/   # DTOs & Validators
+│   │   ├── SiteCraft.Domain/        # Entities & Interfaces
+│   │   └── SiteCraft.Infrastructure/ # Services & Repositories
+│   ├── docker-compose.yml           # App services
+│   └── docker-compose.infra.yml     # MySQL & Redis
+│
+├── sitecraft-client/
+│   ├── src/
+│   │   ├── pages/           # Login, Register, Dashboard
+│   │   ├── components/      # Reusable UI components
+│   │   ├── contexts/        # Auth context
+│   │   ├── hooks/           # useAuth hook
+│   │   ├── services/        # API client & auth service
+│   │   ├── types/           # TypeScript interfaces
+│   │   └── config/          # API configuration
+│   └── package.json
+│
+├── plans/                   # Project documentation
+│   ├── active/              # Current phase plans
+│   ├── completed/           # Completed documentation
+│   └── Architecture.md      # System architecture
+│
+├── API_DOCUMENTATION.md     # Complete API reference
+├── PHASE6_PROGRESS.md       # Current progress tracker
+└── README.md                # This file
 ```
 
 ---
 
-## 🎯 Core Features
+## 🎯 Core Features (Roadmap)
 
-- **AI-Powered Builder:** Drag-and-drop editor with AI content generation
+### ✅ Implemented (Phase 6)
+- ✅ **Authentication:** JWT-based auth with refresh tokens
+- ✅ **Multi-Tenancy:** Tenant isolation via X-Tenant-Id header
+- ✅ **User Management:** Registration, login, logout, user profile
+
+### 🔜 Next Phase (Phase 7)
+- 🔜 **Project Management:** CRUD operations for website projects
+- 🔜 **Page Builder:** Create and manage pages within projects
+- 🔜 **Component System:** Reusable UI components for pages
+
+### 🎯 Future Features
+- **AI Content Generation:** GPT-4 powered content creation
 - **Template Gallery:** Pre-designed, customizable templates
-- **Multi-Tenancy:** Full tenant isolation with custom domains
-- **User Management:** Role-based access (SuperAdmin, TenantAdmin, User)
-- **Domain Management:** Custom domain mapping & SSL
-- **Billing & Subscriptions:** Tiered pricing (Free, Starter, Pro, Enterprise)
-- **Analytics Dashboard:** Traffic, conversions, user behavior
-
----
-
-## 📚 Key Documentation
-
-| Document | Description |
-|----------|-------------|
-| [Architecture.md](plans/Architecture.md) | Technical architecture, Clean Architecture layers, Docker setup |
-| [SiteCraft_PRD.md](plans/SiteCraft_PRD.md) | Complete product requirements, features, user stories, API design |
-| [project.md](plans/project.md) | Project vision, roadmap, core pillars |
-| [SiteCraft_Brand_Identity.md](plans/SiteCraft_Brand_Identity.md) | Brand colors, typography, UI components |
-| [Phase1_System_Analysis.md](plans/completed/Phase1_System_Analysis.md) | System analysis with UML diagrams, ERD |
-
----
-
-## 🧠 AI-Assisted Development
-
-This project follows the **Vibe Coding Development Lifecycle (VCDL)** as documented in [ref/handbook.md](ref/handbook.md). All AI context files are stored in `.ai/context/` to enable consistent AI-assisted development sessions.
-
-**Key AI Context Files:**
-- [.ai/context/dev_context.md](.ai/context/dev_context.md) — Full development context
-- [.ai/context/conventions.md](.ai/context/conventions.md) — Naming & coding standards
-- [.ai/context/ui_context.md](.ai/context/ui_context.md) — UI/UX rules & brand
-- [.ai/prompts/warmup/WarmUpPrompt.md](.ai/prompts/warmup/WarmUpPrompt.md) — Session warmup
-
----
-
-## 🏗️ Current Status
-
-**Phase:** Planning & Design (Phases 1-5 complete)
-
-**Completed:**
-- ✅ System Analysis (Use Cases, ERD, UML Diagrams)
-- ✅ Product Requirements Document
-- ✅ Architecture Design (Clean Architecture + Multi-tenancy)
-- ✅ Brand Identity & UI Design System
-- ✅ Wireframes & HTML Prototypes
-
-**Next Steps:**
-- 🔜 Phase 6: Environment Setup & Database Schema
-- 🔜 Phase 7: Authentication System
-- 🔜 Phase 8: Core Feature Implementation
+- **Drag-and-Drop Editor:** Visual website builder
+- **Custom Domains:** Domain mapping & SSL
+- **Billing & Subscriptions:** Tiered pricing plans
+- **Analytics Dashboard:** Traffic & conversion tracking
 
 ---
 
 ## 🛠️ Getting Started
 
-*(To be updated when implementation begins)*
-
 ### Prerequisites
 - .NET 8 SDK
 - Node.js 20+
 - MySQL 8
+- Docker & Docker Compose
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd sitecraft
+   ```
+
+2. **Start infrastructure (MySQL & Redis)**
+   ```bash
+   cd backend
+   docker-compose up -d mysql redis
+   ```
+
+3. **Run backend API**
+   ```bash
+   cd backend/src/SiteCraft.API
+   dotnet restore
+   dotnet run
+   ```
+   API will be available at: `http://localhost:5263`
+
+4. **Run frontend**
+   ```bash
+   cd sitecraft-client
+   npm install
+   npm run dev
+   ```
+   App will be available at: `http://localhost:5174`
+
+### First Time Setup
+
+After starting both backend and frontend:
+
+1. Navigate to `http://localhost:5174/register`
+2. Create your first account with:
+   - Email: `admin@sitecraft.com`
+   - Password: `SecurePass123!`
+   - First Name & Last Name
+3. You'll be automatically logged in and redirected to the dashboard
+
+---
+
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [API_DOCUMENTATION.md](API_DOCUMENTATION.md) | Complete API reference with examples |
+| [PHASE6_PROGRESS.md](PHASE6_PROGRESS.md) | Current progress & next steps |
+| [Architecture.md](plans/Architecture.md) | System architecture & design patterns |
+| [SiteCraft_PRD.md](plans/SiteCraft_PRD.md) | Product requirements & features |
+| [Brand Identity](plans/SiteCraft_Brand_Identity.md) | UI/UX guidelines & design system |
+
+---
+
+## 🏗️ Development Status
+
+**Current Phase:** ✅ Phase 6 Complete (Authentication System)
+
+**Progress:**
+- ✅ Phase 1: System Analysis & UML Diagrams
+- ✅ Phase 2-5: Planning & Design
+- ✅ Phase 6: Environment Setup, Multi-Tenancy, Authentication
+- 🔜 Phase 7: Project & Page Management
+- 🔜 Phase 8: AI-Powered Website Builder
+- 🔜 Phase 9: Deployment & Production
+
+---
+
+## 🎨 Brand Identity
+
+**Theme:** Premium Black & Gold  
+**Primary Color:** #F6C453 (Gold)  
+**Background:** #0A0A0A (Deep Black)  
+**Typography:** Bold, uppercase, luxury aesthetic
+
+---
 - Docker & Docker Compose
 
 ### Local Development

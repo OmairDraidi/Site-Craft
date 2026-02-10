@@ -8,7 +8,7 @@ using SiteCraft.Infrastructure.Data;
 namespace SiteCraft.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/tenants")]
 public class TenantsController : ControllerBase
 {
     private readonly ITenantService _tenantService;

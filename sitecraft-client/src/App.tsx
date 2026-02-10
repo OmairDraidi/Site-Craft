@@ -1,73 +1,80 @@
-import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { PrivateRoute } from './components/auth/PrivateRoute';
+import { LoginPage } from './pages/auth/LoginPage';
+import { RegisterPage } from './pages/auth/RegisterPage';
+import { DashboardPage } from './pages/dashboard/DashboardPage';
 
-function App() {
-  const [apiMessage, setApiMessage] = useState<string>('')
-  const [loading, setLoading] = useState(false)
+// Temporary Landing Page
+const LandingPage = () => (
+  <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center p-8 relative overflow-hidden">
+    {/* Effects */}
+    <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-[#F6C453]/10 rounded-full blur-[150px]" />
+    <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-[#F6C453]/5 rounded-full blur-[150px]" />
 
-  const testAPI = async () => {
-    setLoading(true)
-    try {
-      const response = await fetch('http://localhost:5000/api/hello')
-      const data = await response.json()
-      setApiMessage(JSON.stringify(data, null, 2))
-    } catch (error) {
-      setApiMessage('Failed to connect to API: ' + (error as Error).message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-8">
-      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-indigo-600 mb-2">
-            SiteCraft
-          </h1>
-          <p className="text-xl text-gray-600">
-            AI-Powered Website Builder
-          </p>
+    <div className="max-w-4xl w-full relative z-10">
+      <div className="text-center mb-16">
+        <div className="inline-block p-4 rounded-3xl bg-gradient-to-br from-[#1A1A1A] to-[#0A0A0A] border border-white/10 mb-8 shadow-2xl skew-y-3">
+           <div className="h-20 w-20 bg-gradient-to-br from-[#F6C453] to-[#CBA34E] rounded-2xl flex items-center justify-center shadow-[0_0_50px_rgba(246,196,83,0.3)]">
+              <span className="text-black text-5xl font-black italic">S</span>
+           </div>
+        </div>
+        <h1 className="text-8xl font-black text-white mb-4 tracking-tighter italic">Site<span className="text-[#F6C453]">Craft</span></h1>
+        <p className="text-2xl text-gray-500 font-medium tracking-[0.3em] uppercase">Premium AI Builder</p>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="p-8 bg-[#111111] border border-white/10 rounded-[2.5rem] text-white hover:border-[#F6C453]/50 transition-all cursor-pointer group shadow-2xl" onClick={() => window.location.href='/login'}>
+          <div className="h-12 w-12 bg-[#F6C453] rounded-2xl flex items-center justify-center mb-6 text-black group-hover:scale-110 transition-transform">
+            <ExternalLink className="h-6 w-6" />
+          </div>
+          <h3 className="text-2xl font-black mb-2 uppercase tracking-tight">Access Studio</h3>
+          <p className="text-gray-500 text-sm font-medium">Continue your high-end project development.</p>
         </div>
         
-        <div className="space-y-6">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded">
-            <h2 className="text-lg font-semibold text-indigo-800 mb-2">
-              🎉 Frontend Setup Complete!
-            </h2>
-            <ul className="text-sm text-indigo-700 space-y-1">
-              <li>✅ React 19 + TypeScript</li>
-              <li>✅ Vite Development Server</li>
-              <li>✅ Tailwind CSS</li>
-              <li>✅ React Router (Ready)</li>
-              <li>✅ Axios + React Query (Ready)</li>
-              <li>✅ Zustand (Ready)</li>
-            </ul>
+        <div className="p-8 bg-gradient-to-br from-[#F6C453] to-[#CBA34E] rounded-[2.5rem] text-black hover:shadow-[0_0_50px_rgba(246,196,83,0.2)] transition-all cursor-pointer group shadow-2xl" onClick={() => window.location.href='/register'}>
+          <div className="h-12 w-12 bg-black rounded-2xl flex items-center justify-center mb-6 text-[#F6C453] group-hover:scale-110 transition-transform">
+            <Plus className="h-6 w-6" />
           </div>
-
-          <div className="border-t pt-6">
-            <button
-              onClick={testAPI}
-              disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors disabled:bg-gray-400"
-            >
-              {loading ? 'Testing...' : 'Test Backend Connection'}
-            </button>
-            
-            {apiMessage && (
-              <div className="mt-4 bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-auto">
-                <pre>{apiMessage}</pre>
-              </div>
-            )}
-          </div>
-
-          <div className="text-center text-sm text-gray-500 pt-4">
-            <p>Backend: <code className="bg-gray-100 px-2 py-1 rounded">http://localhost:5000</code></p>
-            <p>Frontend: <code className="bg-gray-100 px-2 py-1 rounded">http://localhost:5173</code></p>
-          </div>
+          <h3 className="text-2xl font-black mb-2 uppercase tracking-tight">Begin Crafting</h3>
+          <p className="text-black/70 text-sm font-bold">Join the elite network of digital creators.</p>
         </div>
       </div>
+      
+      <div className="mt-16 text-center">
+        <p className="text-[10px] text-gray-700 font-black uppercase tracking-[0.5em]">SiteCraft v2.0 • Premium Tier Edition</p>
+      </div>
     </div>
-  )
+  </div>
+);
+
+// Helper Icon for Landing Page
+const ExternalLink = ({ className }: { className?: string }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+);
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
+          {/* Protected Routes */}
+          <Route element={<PrivateRoute />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/profile" element={<div>Profile Page (UI Coming Soon)</div>} />
+          </Route>
+
+          {/* Catch all - redirect to home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

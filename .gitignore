@@ -41,6 +41,14 @@ artifacts/
 appsettings.Development.json
 appsettings.Local.json
 
+# ========== Documentation (Keep only essential) ==========
+API_QUICKSTART.md
+API_TESTING_GUIDE.md
+copy.md
+
+# Examples and templates
+sitecraft-client/src/examples/
+
 # ========== Node.js / React ==========
 # Dependencies
 node_modules/

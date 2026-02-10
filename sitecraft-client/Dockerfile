@@ -1,5 +1,5 @@
 # Build stage
-FROM node:20-alpine AS build
+FROM --platform=$BUILDPLATFORM node:20-alpine AS build
 WORKDIR /app
 
 # Copy package files
@@ -14,8 +14,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
+# Production stage  
+FROM --platform=$BUILDPLATFORM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html
 
 # Remove default nginx files

@@ -1,0 +1,212 @@
+### Authentication System Tests for SiteCraft API
+### Base URL
+@baseUrl = http://localhost:5000/api/v1
+@tenantId = {{$guid}}
+
+### Variables (will be set after requests)
+@accessToken = 
+@refreshToken = 
+@userId = 
+
+###############################################
+# 1. Register New User
+###############################################
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+X-Tenant-Id: {{tenantId}}
+
+{
+  "email": "test@example.com",
+  "password": "Test@1234",
+  "confirmPassword": "Test@1234",
+  "firstName": "Test",
+  "lastName": "User"
+}
+
+###############################################
+# 2. Register Second User (Same Tenant)
+###############################################
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+X-Tenant-Id: {{tenantId}}
+
+{
+  "email": "admin@example.com",
+  "password": "Admin@1234",
+  "confirmPassword": "Admin@1234",
+  "firstName": "Admin",
+  "lastName": "User"
+}
+
+###############################################
+# 3. Login with Registered User
+###############################################
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+X-Tenant-Id: {{tenantId}}
+
+{
+  "email": "test@example.com",
+  "password": "Test@1234"
+}
+
+###
+# Extract tokens from login response
+@accessToken = {{login.response.body.$.data.accessToken}}
+@refreshToken = {{login.response.body.$.data.refreshToken}}
+
+###############################################
+# 4. Login with Wrong Password (Should Fail)
+###############################################
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+X-Tenant-Id: {{tenantId}}
+
+{
+  "email": "test@example.com",
+  "password": "WrongPassword"
+}
+
+###############################################
+# 5. Get Current User Info (Protected)
+###############################################
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{accessToken}}
+X-Tenant-Id: {{tenantId}}
+
+###############################################
+# 6. Get Current User Without Token (Should Fail)
+###############################################
+GET {{baseUrl}}/auth/me
+X-Tenant-Id: {{tenantId}}
+
+###############################################
+# 7. Refresh Access Token
+###############################################
+# @name refresh
+POST {{baseUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+###
+# Extract new tokens from refresh response
+@accessToken = {{refresh.response.body.$.data.accessToken}}
+@refreshToken = {{refresh.response.body.$.data.refreshToken}}
+
+###############################################
+# 8. Logout (Revoke Refresh Tokens)
+###############################################
+POST {{baseUrl}}/auth/logout
+Authorization: Bearer {{accessToken}}
+X-Tenant-Id: {{tenantId}}
+
+###############################################
+# 9. Try Using Old Refresh Token After Logout (Should Fail)
+###############################################
+POST {{baseUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+###############################################
+# 10. Register with Weak Password (Should Fail)
+###############################################
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+X-Tenant-Id: {{tenantId}}
+
+{
+  "email": "weak@example.com",
+  "password": "weak",
+  "confirmPassword": "weak",
+  "firstName": "Weak",
+  "lastName": "User"
+}
+
+###############################################
+# 11. Register with Invalid Email (Should Fail)
+###############################################
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+X-Tenant-Id: {{tenantId}}
+
+{
+  "email": "not-an-email",
+  "password": "Test@1234",
+  "confirmPassword": "Test@1234",
+  "firstName": "Invalid",
+  "lastName": "Email"
+}
+
+###############################################
+# 12. Register with Password Mismatch (Should Fail)
+###############################################
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+X-Tenant-Id: {{tenantId}}
+
+{
+  "email": "mismatch@example.com",
+  "password": "Test@1234",
+  "confirmPassword": "Different@1234",
+  "firstName": "Mismatch",
+  "lastName": "User"
+}
+
+###############################################
+# 13. Test Multi-Tenancy Isolation
+###############################################
+
+### Create another tenant ID
+@tenantId2 = {{$guid}}
+
+### Register user in Tenant 2
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+X-Tenant-Id: {{tenantId2}}
+
+{
+  "email": "test@example.com",
+  "password": "Test@1234",
+  "confirmPassword": "Test@1234",
+  "firstName": "Tenant2",
+  "lastName": "User"
+}
+
+### Try login with Tenant 1 ID but Tenant 2 credentials (Should Fail - Email not in Tenant 1)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+X-Tenant-Id: {{tenantId}}
+
+{
+  "email": "test@example.com",
+  "password": "Test@1234"
+}
+
+###############################################
+# JWT Token Tenant Isolation Test
+###############################################
+
+### Login and get token for Tenant 1
+# @name loginTenant1
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+X-Tenant-Id: {{tenantId}}
+
+{
+  "email": "test@example.com",
+  "password": "Test@1234"
+}
+
+###
+@accessTokenT1 = {{loginTenant1.response.body.$.data.accessToken}}
+
+### Try accessing protected endpoint using JWT token (tenant_id in claims should be used)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{accessTokenT1}}
