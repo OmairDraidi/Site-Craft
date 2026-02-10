@@ -98,4 +98,3 @@ volumes:
 networks:
   sitecraft_network:
     driver: bridge
-    driver: bridge
