@@ -1,0 +1,67 @@
+Graduation Project Assignment: PRD Writing
+
+🎯 Task
+You are required to write a Product Requirement Document (PRD) for your graduation project in the Vibe Coding course.
+The PRD must be written in Markdown (.md).
+It must include at least one Mermaid diagram (flowchart, system design, or user journey).
+It must include at least one HTML block (e.g., table, card, styled text).
+Using Mermaid + HTML will make your PRD professional and visual.
+---
+
+✅ Requirements
+
+1. Project Idea
+Your project idea must be clear and explained in 3–5 sentences.
+We recommend building a website (Django + React suggested), but you may propose other ideas if you can justify them.
+2. PRD Content (Minimum Sections)
+Project Overview – what is your project about?
+Target Users – who will benefit from it?
+Core Features – list at least 5.
+System/Process Flow – represented in a Mermaid diagram.
+UI/UX Concept – shown with an HTML block.
+3. Tools for Serving the PRD
+You can use Node.js with Docsify, VitePress, or MkDocs to preview your Markdown with Mermaid + HTML rendered.
+---
+
+📊 Example Snippet (for inspiration only)
+
+# Graduation Project: Smart To-Do App
+
+## System Flow
+```mermaid
+flowchart LR
+User -->|Create Task| App[Web App]
+App -->|Store| DB[(Database)]
+App -->|Notify| User
+---------------------------------------------------------------------------------------------------------
+# Graduation Project: [اسم المشروع]
+
+## 📌 Project Overview
+[اكتب 3–5 جمل تشرح المشروع: شو هو، شو مشكلته، وليش مهم]
+
+---
+
+## 👥 Target Users
+- [الفئة 1: مين؟ وليش رح يستخدم المشروع؟]
+- [الفئة 2: مين؟ وليش؟]
+- [الفئة 3: مين؟ وليش؟]
+
+---
+
+## ⭐ Core Features
+1. [الميزة الأولى]
+2. [الميزة الثانية]
+3. [الميزة الثالثة]
+4. [الميزة الرابعة]
+5. [الميزة الخامسة]
+6. [إضافة ميزات أخرى إذا بدك]
+
+---
+
+## 🔄 System / Process Flow
+```mermaid
+flowchart TD
+User -->|Action 1| Frontend[Frontend App]
+Frontend --> Backend[Backend API]
+Backend --> DB[(Database)]
+User -->|Action 2| Frontend

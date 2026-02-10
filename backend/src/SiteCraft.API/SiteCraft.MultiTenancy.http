@@ -1,0 +1,88 @@
+### SiteCraft Multi-Tenancy Testing
+
+@baseUrl = http://localhost:5000/api
+
+### Health Check
+GET {{baseUrl}}/health
+
+### ========================================
+### TENANT MANAGEMENT
+### ========================================
+
+### Create Demo Tenant
+POST {{baseUrl}}/tenants/seed-demo
+
+### Create Second Tenant
+POST {{baseUrl}}/tenants/seed-second
+
+### Get All Tenants
+GET {{baseUrl}}/tenants
+
+### Get Current Tenant (Demo)
+GET {{baseUrl}}/tenants/current
+X-Tenant-Id: demo
+
+### Get Current Tenant (Company B)
+GET {{baseUrl}}/tenants/current
+X-Tenant-Id: companyb
+
+### ========================================
+### USER MANAGEMENT (Multi-Tenancy Testing)
+### ========================================
+
+### Create User for Demo Tenant
+POST {{baseUrl}}/users/seed-demo-user
+X-Tenant-Id: demo
+
+### Create User for Company B Tenant
+POST {{baseUrl}}/users/seed-demo-user
+X-Tenant-Id: companyb
+
+### Get Users for Demo Tenant (should show only demo users)
+GET {{baseUrl}}/users
+X-Tenant-Id: demo
+
+### Get Users for Company B Tenant (should show only companyb users)
+GET {{baseUrl}}/users
+X-Tenant-Id: companyb
+
+### Try to Get Users WITHOUT Tenant Context (should fail)
+GET {{baseUrl}}/users
+
+### ========================================
+### MULTI-TENANCY VALIDATION
+### ========================================
+
+### Tenant 'demo' should see 1 user (admin@demo.com)
+# Expected: count = 1, email = admin@demo.com
+GET {{baseUrl}}/users
+X-Tenant-Id: demo
+
+### Tenant 'companyb' should see 1 user (admin@companyb.com)
+# Expected: count = 1, email = admin@companyb.com
+GET {{baseUrl}}/users
+X-Tenant-Id: companyb
+
+### ========================================
+### NOTES
+### ========================================
+
+# ✅ Multi-Tenancy Features Implemented:
+# 1. Tenant Entity with subdomain support
+# 2. ITenantEntity interface for multi-tenant entities
+# 3. Global Query Filters (automatic TenantId filtering)
+# 4. TenantResolutionMiddleware (extracts tenant from header/subdomain)
+# 5. Auto-set TenantId on SaveChanges
+# 6. Complete data isolation between tenants
+
+# 🧪 Testing Strategy:
+# - Create multiple tenants
+# - Create users for each tenant
+# - Verify that each tenant sees only their own data
+# - Confirm Global Query Filter works automatically
+
+# 🔒 Security Notes:
+# - In production, use JWT tokens with TenantId claim
+# - Replace header-based tenant resolution with subdomain/domain
+# - Add proper authentication & authorization
+# - Validate TenantId in all operations
