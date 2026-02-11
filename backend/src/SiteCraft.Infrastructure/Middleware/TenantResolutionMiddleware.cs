@@ -19,11 +19,10 @@ public class TenantResolutionMiddleware
     public async Task InvokeAsync(HttpContext context, ITenantService tenantService, SiteCraftDbContext dbContext)
     {
         // استخراج TenantId من:
-        // 1. Header (X-Tenant-Id) - للتطوير فقط (أولوية عالية)
-        // 2. JWT Token Claims (tenant_id)
-        // 3. Subdomain (example.sitecraft.com)
-        // 4. Custom Domain
-        // 5. Default Tenant (Development mode only)
+        // 1. Header (X-Tenant-Id) - أولوية عالية للتطوير/الإنتاج
+        // 2. Subdomain (example.sitecraft.com)
+        // 3. Custom Domain
+        // 4. Default Tenant (Development mode only)
         
         var tenantIdentifier = ExtractTenantIdentifier(context);
         
@@ -41,31 +40,16 @@ public class TenantResolutionMiddleware
         }
         else
         {
-            // محاولة استخراج TenantId من JWT Token
-            var tenantIdFromToken = ExtractTenantIdFromJwt(context);
-            if (tenantIdFromToken.HasValue)
+            // 🚀 Development: استخدام Default Tenant تلقائياً
+            var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+            if (isDevelopment)
             {
-                var tenant = await dbContext.Tenants
-                    .FirstOrDefaultAsync(t => t.Id == tenantIdFromToken.Value);
+                var defaultTenant = await dbContext.Tenants
+                    .FirstOrDefaultAsync(t => t.Subdomain == "default" && t.Status == TenantStatus.Active);
                 
-                if (tenant != null && tenant.Status == TenantStatus.Active)
+                if (defaultTenant != null)
                 {
-                    tenantService.SetCurrentTenant(tenant.Id);
-                }
-            }
-            else
-            {
-                // 🚀 Development: استخدام Default Tenant تلقائياً
-                var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
-                if (isDevelopment)
-                {
-                    var defaultTenant = await dbContext.Tenants
-                        .FirstOrDefaultAsync(t => t.Subdomain == "default" && t.Status == TenantStatus.Active);
-                    
-                    if (defaultTenant != null)
-                    {
-                        tenantService.SetCurrentTenant(defaultTenant.Id);
-                    }
+                    tenantService.SetCurrentTenant(defaultTenant.Id);
                 }
             }
         }
@@ -84,38 +68,6 @@ public class TenantResolutionMiddleware
         if (host.Contains(".sitecraft.com"))
         {
             return host.Split('.')[0]; // استخراج subdomain
-        }
-        
-        return null;
-    }
-    
-    private Guid? ExtractTenantIdFromJwt(HttpContext context)
-    {
-        try
-        {
-            // استخراج Token من Authorization Header
-            var authHeader = context.Request.Headers["Authorization"].ToString();
-            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
-                return null;
-            
-            var token = authHeader.Substring("Bearer ".Length).Trim();
-            
-            // Parse JWT token بدون validation (Validation يتم في Authentication Middleware)
-            var handler = new JwtSecurityTokenHandler();
-            if (!handler.CanReadToken(token))
-                return null;
-            
-            var jwtToken = handler.ReadJwtToken(token);
-            var tenantIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "tenant_id");
-            
-            if (tenantIdClaim != null && Guid.TryParse(tenantIdClaim.Value, out var tenantId))
-            {
-                return tenantId;
-            }
-        }
-        catch
-        {
-            // إذا فشل parsing، نتجاهل ونواصل
         }
         
         return null;

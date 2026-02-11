@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -17,18 +17,42 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
+
+  // Handle registration success message
+  useEffect(() => {
+    const state = location.state as { message?: string; email?: string };
+    if (state?.message) {
+      setSuccessMessage(state.message);
+      // Auto-fill email if provided
+      if (state.email) {
+        setValue('email', state.email);
+      }
+      // Clear the location state
+      window.history.replaceState({}, document.title);
+      
+      // Auto-dismiss success message after 5 seconds
+      const timer = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [location, setValue]);
 
   const onSubmit = async (data: LoginFormValues) => {
     setIsSubmitting(true);
@@ -66,6 +90,12 @@ export const LoginPage = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-[440px] relative z-10 px-2 lg:px-0">
         <div className="bg-[#111111]/80 border border-white/10 py-10 px-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-[2.5rem] backdrop-blur-2xl">
           <form className="space-y-7" onSubmit={handleSubmit(onSubmit)}>
+            {successMessage && (
+              <div className="bg-[#F6C453]/10 border border-[#F6C453]/30 p-4 rounded-2xl animate-pulse">
+                <p className="text-xs text-[#F6C453] font-bold uppercase tracking-wider text-center">{successMessage}</p>
+              </div>
+            )}
+            
             {error && (
               <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-2xl animate-shake">
                 <p className="text-xs text-red-500 font-bold uppercase tracking-wider text-center">{error}</p>
@@ -128,7 +158,7 @@ export const LoginPage = () => {
                 />
                 <label className="ml-2 block text-[11px] font-bold text-gray-500 uppercase tracking-wider cursor-pointer select-none">Preserve Session</label>
               </div>
-              <Link to="#" className="text-[11px] font-black text-[#F6C453] hover:text-[#FFDFA0] uppercase tracking-wider transition-colors">Forgot Key?</Link>
+              <Link to="/forgot-password" className="text-[11px] font-black text-[#F6C453] hover:text-[#FFDFA0] uppercase tracking-wider transition-colors">Forgot Key?</Link>
             </div>
 
             <div className="pt-2">

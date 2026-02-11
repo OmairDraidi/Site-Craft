@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SiteCraft.Domain.Entities;
@@ -7,6 +8,7 @@ using SiteCraft.Infrastructure.Data;
 
 namespace SiteCraft.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/v1/users")]
 public class UsersController : ControllerBase
@@ -51,6 +53,7 @@ public class UsersController : ControllerBase
         });
     }
     
+#if DEBUG
     [HttpPost("seed-demo-user")]
     public async Task<IActionResult> SeedDemoUser()
     {
@@ -86,7 +89,7 @@ public class UsersController : ControllerBase
             Email = $"admin@{tenant.Subdomain}.com",
             FirstName = "Admin",
             LastName = "User",
-            PasswordHash = "hashed_password_here", // In real scenario, use proper hashing
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"), // Demo password
             Role = UserRole.Owner,
             IsActive = true,
             CreatedAt = DateTime.UtcNow
@@ -103,4 +106,5 @@ public class UsersController : ControllerBase
             tenantId = user.TenantId
         });
     }
+#endif
 }

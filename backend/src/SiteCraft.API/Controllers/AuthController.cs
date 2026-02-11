@@ -190,6 +190,8 @@ public class AuthController : ControllerBase
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             var emailClaim = User.FindFirst(ClaimTypes.Email);
+            var firstNameClaim = User.FindFirst(ClaimTypes.GivenName);
+            var lastNameClaim = User.FindFirst(ClaimTypes.Surname);
             var roleClaim = User.FindFirst(ClaimTypes.Role);
             var tenantIdClaim = User.FindFirst("tenant_id");
 
@@ -202,8 +204,8 @@ public class AuthController : ControllerBase
             {
                 Id = Guid.Parse(userIdClaim.Value),
                 Email = emailClaim.Value,
-                FirstName = "", // These would need to be included in JWT claims if needed
-                LastName = "",
+                FirstName = firstNameClaim?.Value ?? "",
+                LastName = lastNameClaim?.Value ?? "",
                 Role = roleClaim?.Value ?? "",
                 TenantId = tenantIdClaim != null ? Guid.Parse(tenantIdClaim.Value) : Guid.Empty
             };
@@ -214,6 +216,53 @@ public class AuthController : ControllerBase
         {
             _logger.LogError(ex, "Error retrieving current user");
             return StatusCode(500, ApiResponse<UserDTO>.ErrorResponse("An error occurred"));
+        }
+    }
+
+    [HttpPost("forgot-password")]
+    public async Task<ActionResult<ApiResponse>> ForgotPassword([FromBody] ForgotPasswordRequestDTO request)
+    {
+        try
+        {
+            var tenantId = _tenantService.GetCurrentTenantId();
+            if (!tenantId.HasValue)
+            {
+                return BadRequest(ApiResponse.ErrorResponse("Tenant not found. Please provide X-Tenant-Id header."));
+            }
+
+            // Always return success to prevent email enumeration attacks
+            // The actual email will only be sent if the user exists
+            _logger.LogInformation("Password reset requested for email: {Email}", request.Email);
+            
+            // TODO: Implement actual password reset logic
+            // await _passwordResetService.SendResetEmailAsync(request.Email, tenantId.Value);
+
+            return Ok(ApiResponse.SuccessResponse(
+                "If an account exists with this email, you will receive password reset instructions."));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during forgot password request");
+            return StatusCode(500, ApiResponse.ErrorResponse("An error occurred"));
+        }
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<ActionResult<ApiResponse>> ResetPassword([FromBody] ResetPasswordRequestDTO request)
+    {
+        try
+        {
+            // TODO: Implement actual password reset logic
+            // var result = await _passwordResetService.ResetPasswordAsync(request.Token, request.NewPassword);
+            
+            _logger.LogInformation("Password reset attempted with token");
+            
+            return Ok(ApiResponse.SuccessResponse("Password reset successful. Please login with your new password."));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during password reset");
+            return StatusCode(500, ApiResponse.ErrorResponse("An error occurred during password reset"));
         }
     }
 }

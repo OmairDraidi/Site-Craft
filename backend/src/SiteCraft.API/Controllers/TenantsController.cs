@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SiteCraft.Domain.Entities;
@@ -7,6 +8,7 @@ using SiteCraft.Infrastructure.Data;
 
 namespace SiteCraft.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/v1/tenants")]
 public class TenantsController : ControllerBase
@@ -45,6 +47,7 @@ public class TenantsController : ControllerBase
         });
     }
     
+#if DEBUG
     [HttpPost("seed-demo")]
     public async Task<IActionResult> SeedDemoTenant()
     {
@@ -82,7 +85,9 @@ public class TenantsController : ControllerBase
             instructions = "Use header 'X-Tenant-Id: demo' to test multi-tenancy"
         });
     }
+#endif
     
+#if DEBUG
     [HttpPost("seed-second")]
     public async Task<IActionResult> SeedSecondTenant()
     {
@@ -119,6 +124,7 @@ public class TenantsController : ControllerBase
             instructions = "Use header 'X-Tenant-Id: companyb' to test multi-tenancy"
         });
     }
+#endif
     
     [HttpGet]
     public IActionResult GetAllTenants()

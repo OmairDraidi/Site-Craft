@@ -38,13 +38,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           setToken(storedToken);
           setUser(storedUser);
 
-          // Optionally validate token with backend
-          // await refreshAuth();
+          // Validate token with backend
+          try {
+            await refreshAuth();
+          } catch (error) {
+            // Token invalid, will be cleared by refreshAuth
+            console.error('Token validation failed:', error);
+          }
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
         // Clear invalid auth state
-        authService.logout();
+        await authService.logout();
       } finally {
         setIsLoading(false);
       }
@@ -77,8 +82,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   // Logout
-  const logout = useCallback(() => {
-    authService.logout();
+  const logout = useCallback(async () => {
+    await authService.logout();
     setToken(null);
     setUser(null);
   }, []);

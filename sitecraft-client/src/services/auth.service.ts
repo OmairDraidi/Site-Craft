@@ -1,6 +1,6 @@
 import apiClient from './api.client';
 import { API_ENDPOINTS } from '../config/api.config';
-import { tokenStorage, userStorage } from '../utils/storage';
+import { tokenStorage, userStorage, refreshTokenStorage } from '../utils/storage';
 import type { 
   LoginRequest, 
   RegisterRequest, 
@@ -22,7 +22,7 @@ class AuthService {
 
     // Store tokens and user
     tokenStorage.setToken(accessToken);
-    localStorage.setItem('sitecraft_refresh_token', refreshToken);
+    refreshTokenStorage.setRefreshToken(refreshToken);
     userStorage.setUser(user);
 
     return response.data.data;
@@ -41,7 +41,7 @@ class AuthService {
 
     // Store tokens and user
     tokenStorage.setToken(accessToken);
-    localStorage.setItem('sitecraft_refresh_token', refreshToken);
+    refreshTokenStorage.setRefreshToken(refreshToken);
     userStorage.setUser(user);
 
     return response.data.data;
@@ -50,13 +50,18 @@ class AuthService {
   /**
    * Logout user
    */
-  logout(): void {
-    // Clear storage
-    tokenStorage.removeToken();
-    userStorage.removeUser();
-
-    // Optionally call backend logout endpoint
-    // apiClient.post(API_ENDPOINTS.AUTH.LOGOUT).catch(() => {});
+  async logout(): Promise<void> {
+    try {
+      // Call backend logout endpoint to revoke refresh tokens
+      await apiClient.post(API_ENDPOINTS.AUTH.LOGOUT);
+    } catch (error) {
+      console.error('Error during logout:', error);
+    } finally {
+      // Clear all storage
+      tokenStorage.removeToken();
+      refreshTokenStorage.removeRefreshToken();
+      userStorage.removeUser();
+    }
   }
 
   /**
@@ -74,6 +79,13 @@ class AuthService {
   }
 
   /**
+   * Get refresh token from storage
+   */
+  getRefreshToken(): string | null {
+    return refreshTokenStorage.getRefreshToken();
+  }
+
+  /**
    * Check if user is authenticated
    */
   isAuthenticated(): boolean {
@@ -83,16 +95,62 @@ class AuthService {
   }
 
   /**
+   * Refresh access token using refresh token
+   */
+  async refreshToken(): Promise<AuthResponse> {
+    const refreshToken = this.getRefreshToken();
+    
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+
+    const response = await apiClient.post<{ success: boolean; data: AuthResponse }>(
+      API_ENDPOINTS.AUTH.REFRESH,
+      { refreshToken }
+    );
+
+    const { accessToken, refreshToken: newRefreshToken, user } = response.data.data;
+
+    // Update tokens and user
+    tokenStorage.setToken(accessToken);
+    refreshTokenStorage.setRefreshToken(newRefreshToken);
+    userStorage.setUser(user);
+
+    return response.data.data;
+  }
+
+  /**
    * Refresh authentication (validate token with backend)
    */
   async refreshAuth(): Promise<User> {
-    const response = await apiClient.get<User>(API_ENDPOINTS.USERS.ME);
-    const user = response.data;
+    const response = await apiClient.get<{ success: boolean; data: User }>(API_ENDPOINTS.USERS.ME);
+    const user = response.data.data;
     
     // Update stored user
     userStorage.setUser(user);
     
     return user;
+  }
+
+  /**
+   * Request password reset
+   */
+  async forgotPassword(email: string): Promise<void> {
+    await apiClient.post(
+      API_ENDPOINTS.AUTH.FORGOT_PASSWORD,
+      { email }
+    );
+    // Note: Always returns success to prevent email enumeration
+  }
+
+  /**
+   * Reset password with token
+   */
+  async resetPassword(token: string, newPassword: string, confirmPassword: string): Promise<void> {
+    await apiClient.post(
+      API_ENDPOINTS.AUTH.RESET_PASSWORD,
+      { token, newPassword, confirmPassword }
+    );
   }
 }
 

@@ -108,6 +108,11 @@ builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 // Add Application Services
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenBlacklistService, TokenBlacklistService>();
+
+// Add Background Services
+builder.Services.AddHostedService<ConfigurationValidationService>(); // Validates configuration on startup
+builder.Services.AddHostedService<TokenCleanupService>(); // Cleans up expired tokens hourly
 
 // Add Redis (StackExchange.Redis)
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -182,6 +187,9 @@ app.UseSerilogRequestLogging();
 
 // CORS
 app.UseCors("AllowFrontend");
+
+// Rate Limiting (must be before authentication)
+app.UseMiddleware<RateLimitingMiddleware>();
 
 // Multi-Tenancy Resolution
 app.UseMiddleware<TenantResolutionMiddleware>();

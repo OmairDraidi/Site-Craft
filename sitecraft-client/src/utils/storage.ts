@@ -1,3 +1,5 @@
+import type { User } from '../types/auth.types';
+
 // Local Storage Utilities
 export const storage = {
   get: <T>(key: string): T | null => {
@@ -44,7 +46,14 @@ export const tokenStorage = {
 
 // User Management
 export const userStorage = {
-  getUser: () => storage.get<any>('sitecraft_user'),
-  setUser: (user: any): void => storage.set('sitecraft_user', user),
+  getUser: () => storage.get<User>('sitecraft_user'),
+  setUser: (user: User): void => storage.set('sitecraft_user', user),
   removeUser: (): void => storage.remove('sitecraft_user'),
+};
+
+// Refresh Token Management
+export const refreshTokenStorage = {
+  getRefreshToken: (): string | null => storage.get<string>('sitecraft_refresh_token'),
+  setRefreshToken: (token: string): void => storage.set('sitecraft_refresh_token', token),
+  removeRefreshToken: (): void => storage.remove('sitecraft_refresh_token'),
 };

@@ -43,7 +43,13 @@ export const RegisterPage = () => {
     setError(null);
     try {
       await authRegister(data);
-      navigate('/dashboard');
+      // Redirect to login page after successful registration
+      navigate('/login', { 
+        state: { 
+          message: 'Account created successfully! Please login to continue.',
+          email: data.email 
+        } 
+      });
     } catch (err) {
       setError(formatApiError(err));
     } finally {

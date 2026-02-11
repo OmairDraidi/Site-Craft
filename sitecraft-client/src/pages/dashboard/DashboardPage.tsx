@@ -6,12 +6,7 @@ import {
   Settings, 
   Plus, 
   Database, 
-  Building,
-  Mail,
-  Lock,
-  Loader2,
-  Eye,
-  EyeOff
+  Building
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -19,8 +14,8 @@ export const DashboardPage = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
   };
 
@@ -121,7 +116,7 @@ export const DashboardPage = () => {
                  <Plus className="h-16 w-16 text-[#F6C453] group-hover:scale-110 transition-transform" />
                </div>
             </div>
-            <h3 className="text-4xl font-black text-white mb-6 tracking-tight uppercase italic italic">START NEW <span className="text-[#F6C453]">CRAFT</span></h3>
+            <h3 className="text-4xl font-black text-white mb-6 tracking-tight uppercase italic">START NEW <span className="text-[#F6C453]">CRAFT</span></h3>
             <p className="text-gray-500 mb-14 font-medium text-xl leading-relaxed">Your creative portfolio is waiting for its centerpiece. Initiate the AI architect to begin your legacy.</p>
             <button className="group relative bg-gradient-to-r from-[#F6C453] via-[#FFDFA0] to-[#CBA34E] text-black px-16 py-6 rounded-[2rem] font-black tracking-[0.3em] text-[12px] uppercase shadow-[0_30px_60px_rgba(246,196,83,0.25)] hover:shadow-[0_40px_80px_rgba(246,196,83,0.35)] transition-all transform hover:-translate-y-2 active:scale-95 overflow-hidden">
               <div className="absolute inset-0 w-full h-full bg-white/30 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-[-25deg]" />

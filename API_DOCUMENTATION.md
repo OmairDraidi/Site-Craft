@@ -222,7 +222,99 @@ Authorization: Bearer your_access_token_here
 
 ---
 
-### 5. Get Current User (Me)
+### 5. Forgot Password
+
+**Endpoint:** `POST /api/v1/auth/forgot-password`
+
+**Headers:**
+```http
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "email": "admin@sitecraft.com"
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "If this email exists, a password reset link has been sent."
+}
+```
+
+**Notes:**
+- Returns success message even if email doesn't exist (security best practice)
+- Prevents email enumeration attacks
+- Implementation sends email with reset token (to be completed in Phase 7)
+
+**cURL Example:**
+```bash
+curl -X POST http://localhost:5263/api/v1/auth/forgot-password \
+  -H "Content-Type: application/json" \
+  -d '{"email": "admin@sitecraft.com"}'
+```
+
+---
+
+### 6. Reset Password
+
+**Endpoint:** `POST /api/v1/auth/reset-password`
+
+**Headers:**
+```http
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "token": "reset_token_from_email",
+  "newPassword": "NewSecurePass123!",
+  "confirmPassword": "NewSecurePass123!"
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Password has been reset successfully. You can now login with your new password."
+}
+```
+
+**Error Response (400):**
+```json
+{
+  "success": false,
+  "message": "Invalid or expired reset token"
+}
+```
+
+**Password Requirements:**
+- Minimum 8 characters
+- At least one uppercase letter
+- At least one lowercase letter
+- At least one digit
+- At least one special character
+
+**cURL Example:**
+```bash
+curl -X POST http://localhost:5263/api/v1/auth/reset-password \
+  -H "Content-Type: application/json" \
+  -d '{
+    "token": "reset_token_here",
+    "newPassword": "NewSecurePass123!",
+    "confirmPassword": "NewSecurePass123!"
+  }'
+```
+
+---
+
+### 7. Get Current User (Me)
 
 **Endpoint:** `GET /api/v1/auth/me`  
 **🔒 Protected:** Requires Authentication
@@ -601,7 +693,10 @@ await apiClient.get('/api/v1/users', {
 - **JWT Token Expiry:** 60 minutes (configurable in `appsettings.json`)
 - **Refresh Token:** Use before access token expires
 - **Multi-Tenancy:** Always provide `X-Tenant-Id` header
-- **Password Requirements:** Minimum 6 characters (update validation as needed)
+- **Password Requirements (Login/Register):** Minimum 6 characters
+- **Password Requirements (Reset):** Minimum 8 characters with complexity rules
+- **Password Reset Token:** Valid for 1 hour
+- **Rate Limiting:** 10 requests/minute, 30 requests/5 minutes, 100 requests/hour on auth endpoints
 - **CORS:** Configured for `localhost:5173`, `localhost:5174`, `localhost:3000`
 
 ---

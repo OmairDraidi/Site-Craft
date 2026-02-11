@@ -8,7 +8,8 @@
 
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:5263',
+  // Use empty string in dev to leverage Vite proxy, full URL in production
+  BASE_URL: import.meta.env.VITE_API_URL || (import.meta.env.DEV ? '' : 'http://localhost:5263'),
   TIMEOUT: 30000,
   TOKEN_KEY: 'sitecraft_token',
   USER_KEY: 'sitecraft_user',
@@ -28,6 +29,8 @@ export const API_ENDPOINTS = {
     REFRESH: '/api/v1/auth/refresh',
     LOGOUT: '/api/v1/auth/logout',
     ME: '/api/v1/auth/me',
+    FORGOT_PASSWORD: '/api/v1/auth/forgot-password',
+    RESET_PASSWORD: '/api/v1/auth/reset-password',
   },
   
   // 👥 Users
