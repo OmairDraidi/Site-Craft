@@ -9,7 +9,7 @@
 // API Configuration
 export const API_CONFIG = {
   // Use empty string in dev to leverage Vite proxy, full URL in production
-  BASE_URL: import.meta.env.VITE_API_URL || (import.meta.env.DEV ? '' : 'http://localhost:5263'),
+  BASE_URL: import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? '' : 'http://localhost:5263'),
   TIMEOUT: 30000,
   TOKEN_KEY: 'sitecraft_token',
   USER_KEY: 'sitecraft_user',
@@ -36,7 +36,7 @@ export const API_ENDPOINTS = {
   // 👥 Users
   USERS: {
     LIST: '/api/v1/users',
-    ME: '/api/v1/users/me',
+    ME: '/api/v1/auth/me',
     PROFILE: '/api/v1/users/profile',
     SEED_DEMO: '/api/v1/users/seed-demo-user',
   },
@@ -47,6 +47,24 @@ export const API_ENDPOINTS = {
     LIST: '/api/v1/tenants',
     SEED_DEMO: '/api/v1/tenants/seed-demo',
     SEED_SECOND: '/api/v1/tenants/seed-second',
+  },
+  
+  // 📄 Templates
+  TEMPLATES: {
+    LIST: '/api/v1/templates',
+    BY_ID: (id: string) => `/api/v1/templates/${id}`,
+    APPLY: (id: string) => `/api/v1/templates/${id}/apply`,
+    FAVORITE: (id: string) => `/api/v1/templates/${id}/favorite`,
+    FAVORITES: '/api/v1/templates/favorites',
+  },
+  
+  // 📁 Projects
+  PROJECTS: {
+    LIST: '/api/v1/projects',
+    BY_ID: (id: string) => `/api/v1/projects/${id}`,
+    APPLY_TEMPLATE: (id: string, templateId: string) => `/api/v1/projects/${id}/apply-template/${templateId}`,
+    STATUS: (id: string) => `/api/v1/projects/${id}/status`,
+    PAGES: (id: string) => `/api/v1/projects/${id}/pages`,
   },
   
   // 🏥 Health

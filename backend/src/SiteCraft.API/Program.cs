@@ -9,6 +9,7 @@ using FluentValidation.AspNetCore;
 using SiteCraft.Domain.Interfaces;
 using SiteCraft.Application.Interfaces;
 using SiteCraft.Infrastructure.Data;
+using SiteCraft.Infrastructure.Data.Extensions;
 using SiteCraft.Infrastructure.Services;
 using SiteCraft.Infrastructure.Middleware;
 using SiteCraft.Infrastructure.Repositories;
@@ -104,11 +105,16 @@ builder.Services.AddScoped<ITenantService, TenantService>();
 // Add Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
+builder.Services.AddScoped<ISiteRepository, SiteRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
 // Add Application Services
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenBlacklistService, TokenBlacklistService>();
+builder.Services.AddScoped<ITemplateService, TemplateService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 
 // Add Background Services
 builder.Services.AddHostedService<ConfigurationValidationService>(); // Validates configuration on startup
@@ -144,7 +150,22 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization();
+// Add Authorization with Policies
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(SiteCraft.Infrastructure.Authorization.Policies.RequireOwnerRole, policy =>
+        policy.Requirements.Add(new SiteCraft.Infrastructure.Authorization.OwnerRoleRequirement()));
+    
+    options.AddPolicy(SiteCraft.Infrastructure.Authorization.Policies.RequireAdminRole, policy =>
+        policy.Requirements.Add(new SiteCraft.Infrastructure.Authorization.AdminRoleRequirement()));
+    
+    options.AddPolicy(SiteCraft.Infrastructure.Authorization.Policies.RequireAuthenticatedUser, policy =>
+        policy.RequireAuthenticatedUser());
+});
+
+// Register Authorization Handlers
+builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, SiteCraft.Infrastructure.Authorization.OwnerRoleHandler>();
+builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, SiteCraft.Infrastructure.Authorization.AdminRoleHandler>();
 
 // Add Health Checks
 builder.Services.AddHealthChecks();
@@ -164,6 +185,11 @@ using (var scope = app.Services.CreateScope())
         Log.Information("Applying database migrations...");
         dbContext.Database.Migrate();
         Log.Information("Database migrations applied successfully");
+        
+        // Seed default templates
+        Log.Information("Seeding default templates...");
+        dbContext.SeedTemplates();
+        Log.Information("Templates seeded successfully");
     }
     catch (Exception ex)
     {

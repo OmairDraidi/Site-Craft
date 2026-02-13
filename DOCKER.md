@@ -27,7 +27,7 @@ docker-compose up -d
 
 This will start all services:
 - **Frontend** (React + Nginx) on `http://localhost:3000`
-- **Backend API** (.NET) on `http://localhost:5000`
+- **Backend API** (.NET) on `http://localhost:5263`
 - **MySQL Database** on `localhost:3306`
 - **Redis Cache** on `localhost:6379`
 
@@ -195,8 +195,8 @@ docker-compose ps
 ## Accessing Services
 
 - **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000/api
-- **API Documentation**: http://localhost:5000/swagger (if enabled)
+- **Backend API**: http://localhost:5263/api
+- **API Documentation**: http://localhost:5263/swagger (if enabled)
 - **MySQL**: Connect using your favorite MySQL client to `localhost:3306`
   - User: `sitecraft_user`
   - Password: `sitecraft_pass`

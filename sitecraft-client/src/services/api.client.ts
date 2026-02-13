@@ -142,7 +142,7 @@ apiClient.interceptors.response.use(
       switch (status) {
         case 403:
           // Forbidden - No permission
-          console.error('Access denied');
+          // Suppress console error as this is handled by UI toast
           break;
         
         case 404:
@@ -177,4 +177,5 @@ apiClient.interceptors.response.use(
   }
 );
 
+export { apiClient };
 export default apiClient;

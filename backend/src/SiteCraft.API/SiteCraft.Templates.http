@@ -1,0 +1,104 @@
+### SiteCraft Templates API Testing
+### Base URL
+@baseUrl = http://localhost:5263/api/v1
+@tenantId = default
+
+### Variables (Update after login)
+@accessToken = your_access_token_here
+
+### ========================================
+### 1. Get All Templates (Public - No Auth)
+### ========================================
+GET {{baseUrl}}/templates
+X-Tenant-Id: {{tenantId}}
+
+### ========================================
+### 2. Get Templates with Filters (Public - No Auth)
+### ========================================
+
+### Filter by Category
+GET {{baseUrl}}/templates?category=Business
+X-Tenant-Id: {{tenantId}}
+
+###
+
+### Filter by Premium Status
+GET {{baseUrl}}/templates?isPremium=false
+X-Tenant-Id: {{tenantId}}
+
+###
+
+### Search Templates
+GET {{baseUrl}}/templates?searchTerm=modern
+X-Tenant-Id: {{tenantId}}
+
+###
+
+### Combined Filters
+GET {{baseUrl}}/templates?category=Portfolio&isPremium=false&searchTerm=creative
+X-Tenant-Id: {{tenantId}}
+
+### ========================================
+### 3. Get Template by ID (Public - No Auth)
+### ========================================
+### Replace with actual template ID from previous response
+GET {{baseUrl}}/templates/3fa85f64-5717-4562-b3fc-2c963f66afa6
+X-Tenant-Id: {{tenantId}}
+
+### ========================================
+### 4. Apply Template (Protected - Requires Auth)
+### ========================================
+### First, login and get token, then update @accessToken variable above
+POST {{baseUrl}}/templates/3fa85f64-5717-4562-b3fc-2c963f66afa6/apply
+X-Tenant-Id: {{tenantId}}
+Authorization: Bearer {{accessToken}}
+
+### ========================================
+### 5. Create Template (Protected - Requires Owner/Admin)
+### ========================================
+POST {{baseUrl}}/templates
+X-Tenant-Id: {{tenantId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Test Template",
+  "description": "A test template for development purposes",
+  "category": "Business",
+  "previewImageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
+  "isPublic": true,
+  "isPremium": false,
+  "templateData": "{\"version\":\"1.0\",\"pages\":[{\"slug\":\"home\",\"title\":\"Home\",\"sections\":[{\"type\":\"hero\",\"props\":{\"title\":\"Welcome\",\"subtitle\":\"Test template\"}}]}],\"theme\":{\"primaryColor\":\"#F6C453\",\"secondaryColor\":\"#111111\"}}"
+}
+
+### ========================================
+### 6. Update Template (Protected - Requires Owner/Admin)
+### ========================================
+PUT {{baseUrl}}/templates/3fa85f64-5717-4562-b3fc-2c963f66afa6
+X-Tenant-Id: {{tenantId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Updated Template Name",
+  "description": "Updated description",
+  "category": "Portfolio",
+  "previewImageUrl": "https://images.unsplash.com/photo-updated",
+  "isPublic": true,
+  "isPremium": true,
+  "templateData": "{\"version\":\"1.1\",\"pages\":[]}"
+}
+
+### ========================================
+### 7. Delete Template (Protected - Requires Owner/Admin)
+### ========================================
+DELETE {{baseUrl}}/templates/3fa85f64-5717-4562-b3fc-2c963f66afa6
+X-Tenant-Id: {{tenantId}}
+Authorization: Bearer {{accessToken}}
+
+### ========================================
+### Notes:
+### - GET endpoints are PUBLIC (no authentication required)
+### - POST, PUT, DELETE endpoints require authentication
+### - Use Auth.http file to login and get access token first
+### ========================================

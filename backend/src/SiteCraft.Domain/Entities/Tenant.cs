@@ -9,9 +9,11 @@ public class Tenant
     public string Subdomain { get; set; } = string.Empty; // example.sitecraft.com
     public string? CustomDomain { get; set; } // Optional: custom.com
     public TenantStatus Status { get; set; } = TenantStatus.Active;
+    public SubscriptionPlan SubscriptionPlan { get; set; } = SubscriptionPlan.Free;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
     
     // Navigation Properties
     public ICollection<User> Users { get; set; } = new List<User>();
+    public ICollection<Site> Sites { get; set; } = new List<Site>();
 }

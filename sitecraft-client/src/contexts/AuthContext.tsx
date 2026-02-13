@@ -1,5 +1,6 @@
 import { 
   createContext, 
+  useContext,
   useState, 
   useEffect, 
   useCallback,
@@ -15,6 +16,15 @@ import type {
 
 // Create Context
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Hook for using auth context
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
 
 // Provider Props
 interface AuthProviderProps {

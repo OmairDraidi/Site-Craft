@@ -2,7 +2,7 @@
 
 **Base URL:** `http://localhost:5263`  
 **API Version:** `v1`  
-**Last Updated:** February 10, 2026
+**Last Updated:** February 12, 2026
 
 ---
 
@@ -23,9 +23,11 @@
 1. [Authentication Endpoints](#-authentication-endpoints)
 2. [Users Endpoints](#-users-endpoints)
 3. [Tenants Endpoints](#-tenants-endpoints)
-4. [Response Format](#-response-format)
-5. [Error Codes](#-error-codes)
-6. [Frontend Integration Examples](#-frontend-integration-examples)
+4. [Templates Endpoints](#-templates-endpoints)
+5. [Projects Endpoints](#-projects-endpoints)
+6. [Response Format](#-response-format)
+7. [Error Codes](#-error-codes)
+8. [Frontend Integration Examples](#-frontend-integration-examples)
 
 ---
 
@@ -466,7 +468,770 @@ X-Tenant-Id: default
 
 ---
 
-## 📦 Response Format
+## 🎨 Templates Endpoints
+
+### 1. Get All Templates (with Filters)
+
+**Endpoint:** `GET /api/v1/templates`  
+**� Public:** No Authentication Required
+
+**Headers:**
+```http
+X-Tenant-Id: default
+```
+
+**Query Parameters:****
+```
+category     (optional) - Filter by category: Business, Education, Portfolio, Services, Store
+isPremium    (optional) - Filter by premium status: true/false
+searchTerm   (optional) - Search in name and description
+```
+
+**Example Request:**
+```http
+GET /api/v1/templates?category=Business&isPremium=false&searchTerm=modern
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Templates retrieved successfully",
+  "data": [
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "tenantId": null,
+      "name": "Modern Business",
+      "description": "A sleek and professional template for businesses",
+      "category": "Business",
+      "previewImageUrl": "https://images.unsplash.com/photo-business-1",
+      "isPublic": true,
+      "isPremium": false,
+      "templateData": "{...}",
+      "usageCount": 45,
+      "createdAt": "2026-02-11T10:00:00Z",
+      "updatedAt": "2026-02-11T10:00:00Z"
+    }
+  ]
+}
+```
+
+**cURL Example:**
+```bash
+curl -X GET "http://localhost:5263/api/v1/templates?category=Business" \
+  -H "X-Tenant-Id: default"
+```
+
+---
+
+### 2. Get Template by ID
+
+**Endpoint:** `GET /api/v1/templates/{id}`  
+**� Public:** No Authentication Required
+
+**Headers:**
+```http
+X-Tenant-Id: default
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Template retrieved successfully",
+  "data": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "tenantId": null,
+    "name": "Modern Business",
+    "description": "A sleek and professional template for businesses",
+    "category": "Business",
+    "previewImageUrl": "https://images.unsplash.com/photo-business-1",
+    "isPublic": true,
+    "isPremium": false,
+    "templateData": "{\"version\":\"1.0\",\"pages\":[...]}",
+    "usageCount": 45,
+    "createdAt": "2026-02-11T10:00:00Z",
+    "updatedAt": "2026-02-11T10:00:00Z"
+  }
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Template not found"
+}
+```
+
+---
+
+### 3. Create Template
+
+**Endpoint:** `POST /api/v1/templates`  
+**🔒 Protected:** Requires Owner or Admin Role
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_access_token_here
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "name": "Modern Business",
+  "description": "A sleek and professional template for businesses",
+  "category": "Business",
+  "previewImageUrl": "https://images.unsplash.com/photo-business-1",
+  "isPublic": true,
+  "isPremium": false,
+  "templateData": "{\"version\":\"1.0\",\"pages\":[{\"slug\":\"home\",\"title\":\"Home\",\"sections\":[{\"type\":\"hero\",\"props\":{\"title\":\"Welcome\",\"subtitle\":\"Build your dream site\"}}]}],\"theme\":{\"primaryColor\":\"#F6C453\",\"secondaryColor\":\"#111111\"}}"
+}
+```
+
+**Validation Rules:**
+- `name`: Required, max 200 characters
+- `description`: Required, max 1000 characters
+- `category`: Required, must be one of: Business, Education, Portfolio, Services, Store
+- `previewImageUrl`: Required, must be valid URL
+- `templateData`: Required, must be valid JSON
+
+**Success Response (201):**
+```json
+{
+  "success": true,
+  "message": "Template created successfully",
+  "data": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "tenantId": null,
+    "name": "Modern Business",
+    "description": "A sleek and professional template for businesses",
+    "category": "Business",
+    "previewImageUrl": "https://images.unsplash.com/photo-business-1",
+    "isPublic": true,
+    "isPremium": false,
+    "templateData": "{...}",
+    "usageCount": 0,
+    "createdAt": "2026-02-11T10:00:00Z",
+    "updatedAt": "2026-02-11T10:00:00Z"
+  }
+}
+```
+
+**Authorization Notes:**
+- **Owner role:** Can create global templates (tenantId = null)
+- **Admin role:** Can only create private templates for their tenant
+
+**cURL Example:**
+```bash
+curl -X POST http://localhost:5263/api/v1/templates \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Modern Business",
+    "description": "A sleek and professional template",
+    "category": "Business",
+    "previewImageUrl": "https://images.unsplash.com/photo-1",
+    "isPublic": true,
+    "isPremium": false,
+    "templateData": "{\"version\":\"1.0\"}"
+  }'
+```
+
+---
+
+### 4. Update Template
+
+**Endpoint:** `PUT /api/v1/templates/{id}`  
+**🔒 Protected:** Requires Owner or Admin Role
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_access_token_here
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "name": "Updated Modern Business",
+  "description": "An updated sleek and professional template",
+  "category": "Business",
+  "previewImageUrl": "https://images.unsplash.com/photo-business-2",
+  "isPublic": true,
+  "isPremium": false,
+  "templateData": "{\"version\":\"1.1\",\"pages\":[...]}"
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Template updated successfully",
+  "data": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "tenantId": null,
+    "name": "Updated Modern Business",
+    "description": "An updated sleek and professional template",
+    "category": "Business",
+    "previewImageUrl": "https://images.unsplash.com/photo-business-2",
+    "isPublic": true,
+    "isPremium": false,
+    "templateData": "{...}",
+    "usageCount": 45,
+    "createdAt": "2026-02-11T10:00:00Z",
+    "updatedAt": "2026-02-11T12:30:00Z"
+  }
+}
+```
+
+**Authorization Notes:**
+- **Owner role:** Can update all templates (global and private)
+- **Admin role:** Can only update templates from their own tenant
+- Attempting to update another tenant's template returns `403 Forbidden`
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Template not found"
+}
+```
+
+**Error Response (403):**
+```json
+{
+  "success": false,
+  "message": "Forbidden"
+}
+```
+
+---
+
+### 5. Delete Template
+
+**Endpoint:** `DELETE /api/v1/templates/{id}`  
+**🔒 Protected:** Requires Owner or Admin Role
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_access_token_here
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Template deleted successfully",
+  "data": {}
+}
+```
+
+**Authorization Notes:**
+- **Owner role:** Can delete all templates (global and private)
+- **Admin role:** Can only delete templates from their own tenant
+- Attempting to delete another tenant's template returns `403 Forbidden`
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Template not found"
+}
+```
+
+**cURL Example:**
+```bash
+curl -X DELETE http://localhost:5263/api/v1/templates/3fa85f64-5717-4562-b3fc-2c963f66afa6 \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here"
+```
+
+---
+
+### 6. Apply Template to Site
+
+**Endpoint:** `POST /api/v1/templates/{id}/apply`  
+**🔒 Protected:** Requires Authentication
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_access_token_here
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Template applied successfully",
+  "data": {}
+}
+```
+
+**Business Logic:**
+- Copies `templateData` JSON to the user's site
+- Increments template `usageCount` by 1
+- Validates user belongs to active tenant
+- Premium templates require appropriate subscription (future enhancement)
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Template not found"
+}
+```
+
+**Error Response (400):**
+```json
+{
+  "success": false,
+  "message": "Failed to apply template"
+}
+```
+
+**cURL Example:**
+```bash
+curl -X POST http://localhost:5263/api/v1/templates/3fa85f64-5717-4562-b3fc-2c963f66afa6/apply \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here"
+```
+
+---
+
+### Template Categories
+
+The following categories are supported:
+
+| Category | Description | Use Case |
+|----------|-------------|----------|
+| **Business** | Corporate and business websites | Companies, agencies, consultancies |
+| **Education** | Educational institutions and courses | Schools, universities, online courses |
+| **Portfolio** | Personal portfolios and showcases | Designers, photographers, artists |
+| **Services** | Service-based businesses | Contractors, freelancers, service providers |
+| **Store** | E-commerce and online stores | Product sales, online shops |
+
+---
+
+### Template JSON Structure
+
+Templates use a standardized JSON structure:
+
+```json
+{
+  "version": "1.0",
+  "pages": [
+    {
+      "slug": "home",
+      "title": "Home",
+      "sections": [
+        {
+          "type": "hero",
+          "props": {
+            "title": "Welcome to SiteCraft",
+            "subtitle": "Build your dream site",
+            "backgroundImage": "https://..."
+          }
+        },
+        {
+          "type": "features",
+          "props": {
+            "items": [
+              {
+                "icon": "zap",
+                "title": "Fast & Reliable",
+                "description": "Lightning fast performance"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "theme": {
+    "primaryColor": "#F6C453",
+    "secondaryColor": "#111111",
+    "fontFamily": "Inter"
+  }
+}
+```
+
+---
+
+### Default Templates (Seeded)
+
+The application comes with **5 pre-built default templates** that are automatically seeded on first run:
+
+| # | Template Name | Category | Type | Description |
+|---|---------------|----------|------|-------------|
+| 1 | **Academic Excellence** | Education | Free | Perfect for schools, universities, and online courses. Features course listings, faculty profiles, and student testimonials. |
+| 2 | **Professional Services** | Services | Free | Ideal for consulting firms, agencies, and service providers. Showcases your expertise and builds trust. |
+| 3 | **E-Commerce Starter** | Store | Premium | Simple and elegant online store template. Perfect for small businesses starting their e-commerce journey. |
+| 4 | **Creative Showcase** | Portfolio | Free | Stunning portfolio template for designers, photographers, and creative professionals. Let your work speak. |
+| 5 | **Personal Coach Pro** | Services | Premium | Designed for coaches, trainers, and consultants. Highlight your programs and convert visitors to clients. |
+
+**Template Details:**
+
+#### 1. Academic Excellence (Education - Free)
+- **Sections:** Hero, Featured Courses (4 items), Student Testimonials (3), Contact Form, Footer
+- **Color Scheme:** Primary Gold (#F6C453), Dark Background (#111111), Blue Accent (#3B82F6)
+- **Preview Image:** `https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&q=80`
+- **Use Cases:** Schools, universities, online course platforms, tutoring services
+
+#### 2. Professional Services (Services - Free)
+- **Sections:** Hero, Services Cards (4 offerings), About/Stats Section, Contact Form, Footer
+- **Color Scheme:** Primary Gold (#F6C453), Dark Background (#111111), Blue Accent (#2563EB)
+- **Preview Image:** `https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1920&q=80`
+- **Use Cases:** Consulting firms, agencies, professional services, B2B businesses
+
+#### 3. E-Commerce Starter (Store - Premium)
+- **Sections:** Hero, Featured Products Grid (4 products), Why Shop Features (4 items), Contact, Footer
+- **Color Scheme:** Primary Gold (#F6C453), Dark Background (#111111), Green Accent (#10B981)
+- **Preview Image:** `https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80`
+- **Use Cases:** Small online stores, boutique shops, product catalogs, retail businesses
+
+#### 4. Creative Showcase (Portfolio - Free)
+- **Sections:** Hero, Projects Grid (4 portfolio items), About Me/Skills, Contact/Social Links, Footer
+- **Color Scheme:** Primary Gold (#F6C453), Dark Background (#111111), Purple Accent (#8B5CF6)
+- **Preview Image:** `https://images.unsplash.com/photo-1542744094-3a31f272c490?w=1920&q=80`
+- **Use Cases:** Designers, photographers, artists, creative professionals, freelancers
+
+#### 5. Personal Coach Pro (Services - Premium)
+- **Sections:** Hero, Coaching Programs (4 packages), Client Testimonials (3), Booking Form, Contact, Footer
+- **Color Scheme:** Primary Gold (#F6C453), Dark Background (#111111), Red Accent (#EF4444)
+- **Preview Image:** `https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1920&q=80`
+- **Use Cases:** Life coaches, fitness trainers, career coaches, consultants, mentors
+
+**Note:** 
+- Templates are seeded automatically on application startup (only once)
+- All templates have `tenantId = null` (global templates)
+- All templates have `isPublic = true`
+- 3 Free templates + 2 Premium templates
+- All use high-quality Unsplash images
+- All follow the Digital Luxury design theme
+
+---
+
+## � Projects Endpoints
+
+Projects allow users to organize their website building work. Each project belongs to a specific user and tenant.
+
+### 1. Get All Projects (Current User)
+
+**Endpoint:** `GET /api/v1/projects`
+
+**Authentication:** ✅ Required
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_token_here
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Projects retrieved successfully",
+  "data": [
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "name": "My Portfolio Website",
+      "description": "Personal portfolio showcasing my design work",
+      "createdAt": "2026-02-12T10:30:00Z",
+      "updatedAt": "2026-02-12T14:20:00Z"
+    },
+    {
+      "id": "7cb98f32-8821-4973-a2dc-3d851b9c71fa",
+      "name": "Client Project - ABC Corp",
+      "description": "Corporate website for ABC Corporation",
+      "createdAt": "2026-02-11T09:15:00Z",
+      "updatedAt": null
+    }
+  ]
+}
+```
+
+**cURL Example:**
+```bash
+curl -X GET http://localhost:5263/api/v1/projects \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here"
+```
+
+---
+
+### 2. Get Project by ID
+
+**Endpoint:** `GET /api/v1/projects/{id}`
+
+**Authentication:** ✅ Required
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_token_here
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Project retrieved successfully",
+  "data": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "tenantId": "550e8400-e29b-41d4-a716-446655440000",
+    "userId": "9b2c8f64-5717-4562-b3fc-2c963f66afa6",
+    "userName": "John Doe",
+    "name": "My Portfolio Website",
+    "description": "Personal portfolio showcasing my design work",
+    "createdAt": "2026-02-12T10:30:00Z",
+    "updatedAt": "2026-02-12T14:20:00Z"
+  }
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Project not found"
+}
+```
+
+**cURL Example:**
+```bash
+curl -X GET http://localhost:5263/api/v1/projects/3fa85f64-5717-4562-b3fc-2c963f66afa6 \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here"
+```
+
+---
+
+### 3. Create Project
+
+**Endpoint:** `POST /api/v1/projects`
+
+**Authentication:** ✅ Required
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_token_here
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "name": "My Awesome Website",
+  "description": "A description of my project"
+}
+```
+
+**Validation Rules:**
+- `name`: Required, max 100 characters
+- `description`: Optional, max 500 characters
+
+**Success Response (201 Created):**
+```json
+{
+  "success": true,
+  "message": "Project created successfully",
+  "data": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "tenantId": "550e8400-e29b-41d4-a716-446655440000",
+    "userId": "9b2c8f64-5717-4562-b3fc-2c963f66afa6",
+    "userName": "John Doe",
+    "name": "My Awesome Website",
+    "description": "A description of my project",
+    "createdAt": "2026-02-12T15:30:00Z",
+    "updatedAt": null
+  }
+}
+```
+
+**Error Response (400):**
+```json
+{
+  "success": false,
+  "message": "Validation failed",
+  "errors": [
+    "Project name is required",
+    "Project name must not exceed 100 characters"
+  ]
+}
+```
+
+**cURL Example:**
+```bash
+curl -X POST http://localhost:5263/api/v1/projects \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "My Awesome Website",
+    "description": "A description of my project"
+  }'
+```
+
+---
+
+### 4. Update Project
+
+**Endpoint:** `PUT /api/v1/projects/{id}`
+
+**Authentication:** ✅ Required (must be project owner)
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_token_here
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "name": "Updated Project Name",
+  "description": "Updated description"
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Project updated successfully",
+  "data": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "tenantId": "550e8400-e29b-41d4-a716-446655440000",
+    "userId": "9b2c8f64-5717-4562-b3fc-2c963f66afa6",
+    "userName": "John Doe",
+    "name": "Updated Project Name",
+    "description": "Updated description",
+    "createdAt": "2026-02-12T10:30:00Z",
+    "updatedAt": "2026-02-12T16:45:00Z"
+  }
+}
+```
+
+**Error Response (403 Forbidden):**
+```json
+{
+  "success": false,
+  "message": "You do not have permission to update this project"
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Project not found"
+}
+```
+
+**cURL Example:**
+```bash
+curl -X PUT http://localhost:5263/api/v1/projects/3fa85f64-5717-4562-b3fc-2c963f66afa6 \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Updated Project Name",
+    "description": "Updated description"
+  }'
+```
+
+---
+
+### 5. Delete Project
+
+**Endpoint:** `DELETE /api/v1/projects/{id}`
+
+**Authentication:** ✅ Required (must be project owner)
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_token_here
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Project deleted successfully",
+  "data": {}
+}
+```
+
+**Error Response (403 Forbidden):**
+```json
+{
+  "success": false,
+  "message": "You do not have permission to delete this project"
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Project not found"
+}
+```
+
+**cURL Example:**
+```bash
+curl -X DELETE http://localhost:5263/api/v1/projects/3fa85f64-5717-4562-b3fc-2c963f66afa6 \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here"
+```
+
+---
+
+### Project Ownership & Permissions
+
+- ✅ Users can only view their own projects
+- ✅ Users can only update/delete projects they own
+- ✅ Projects are tenant-scoped (multi-tenancy supported)
+- ✅ `UpdatedAt` timestamp automatically set when project is modified
+
+**TypeScript Example:**
+```typescript
+import { projectService } from '@/services/project.service';
+
+// Get all user's projects
+const projects = await projectService.getAllProjects();
+
+// Create a new project
+const newProject = await projectService.createProject({
+  name: 'My New Website',
+  description: 'Building something awesome'
+});
+
+// Update project
+const updated = await projectService.updateProject(projectId, {
+  name: 'Updated Name',
+  description: 'New description'
+});
+
+// Delete project
+await projectService.deleteProject(projectId);
+```
+
+---
+
+## �📦 Response Format
 
 ### Standard Success Response
 ```typescript

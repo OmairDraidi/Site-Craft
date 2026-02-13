@@ -1,6 +1,6 @@
 # SiteCraft — Project Context (AI Summary)
 
-> **Full documentation:** [plans/project.md](../../plans/project.md)
+> **Full documentation:** [plans/Architecture.md](../../plans/Architecture.md)
 
 ---
 
@@ -34,7 +34,7 @@
 
 ---
 
-## Key Features (MVP)
+## Key Features
 
 ### Phase 1-5 (Planning — ✅ Complete)
 - ✅ System analysis, ERD, UML diagrams
@@ -43,30 +43,41 @@
 - ✅ Brand identity & UI design system
 - ✅ Wireframes & HTML prototypes
 
-### Phase 6-8 (Implementation — 🔜 Next)
-- 🔜 **Authentication System:** JWT + role-based access
-- 🔜 **Template Gallery:** Pre-designed templates with AI customization
-- 🔜 **Visual Builder:** Drag-and-drop editor with component library
-- 🔜 **Domain Management:** Custom domain mapping + SSL
-- 🔜 **User Management:** Tenant users with role-based permissions
-- 🔜 **Billing & Subscriptions:** Stripe integration with tiered pricing
+### Phase 6 (Foundation — ✅ Complete)
+- ✅ **Environment Setup:** Backend (ASP.NET Core 8), Frontend (React 19 + Vite), Docker (MySQL + Redis)
+- ✅ **Multi-Tenancy:** Shared DB + TenantId row-level isolation, global query filters
+- ✅ **Authentication:** JWT + BCrypt, refresh tokens, role-based access
 
-### Phase 9-10 (Advanced — Future)
+### Phase 7 (Template Engine — ✅ Complete)
+- ✅ **Template Gallery:** CRUD, search, filter, sort, pagination
+- ✅ **Premium System:** Free/Pro/Enterprise subscription tiers
+- ✅ **Favorites:** Toggle favorites with optimistic UI
+- ✅ **Device Preview:** Desktop/Tablet/Mobile preview
+- ✅ **Unit Tests:** 11 tests, 100% passing
+
+### Phase 8 (Project Details — ✅ Complete)
+- ✅ **Project CRUD:** Create, view, edit, delete projects
+- ✅ **Template Linking:** Apply templates to projects
+- ✅ **Status Management:** Active/Archived/Draft status tracking
+- ✅ **Inline Editing:** Edit project details inline
+
+### Phase 9-10 (Advanced — 🔜 Next)
+- 🔜 Visual page builder (drag-and-drop)
+- ⏳ Custom domain mapping + SSL
 - ⏳ Analytics dashboard
 - ⏳ Advanced AI features (SEO, content optimization)
 - ⏳ Multi-language support (English, Arabic)
-- ⏳ Mobile app
 
 ---
 
 ## Current Phase
 
-**Phase 5 → Phase 6 Transition (February 2026)**
+**Phase 8 → Phase 9 Transition (February 2026)**
 
 **Status:**
-- Planning phases (1-5) are **complete**
-- Implementation about to begin with environment setup
-- Next milestone: Functional authentication system
+- Phases 1-8 are **complete**
+- Next milestone: Visual page builder
+- All core CRUD flows working end-to-end
 
 ---
 
@@ -75,7 +86,7 @@
 - **Frontend:** React 19 + Vite + TypeScript + Tailwind CSS
 - **Backend:** ASP.NET Core 8 + Clean Architecture
 - **Database:** MySQL 8 + Redis (caching)
-- **AI:** OpenAI GPT-4 API
+- **AI:** OpenAI GPT-4 API (planned)
 - **Deployment:** Docker Compose on VPS (Contabo/Hetzner)
 - **Auth:** JWT with multi-tenant middleware
 
@@ -90,11 +101,11 @@
 | 3 | UI/UX Design | ✅ Complete |
 | 4 | Database Design (ERD) | ✅ Complete |
 | 5 | Wireframes & Prototypes | ✅ Complete |
-| 6 | Environment Setup + Database | 🔜 Next |
-| 7 | Authentication System | 🔜 Next |
-| 8 | Template Gallery + Builder | ⏳ Planned |
-| 9 | Advanced Features | ⏳ Planned |
-| 10 | Testing & Launch | ⏳ Planned |
+| 6 | Environment + Multi-Tenancy + Auth | ✅ Complete |
+| 7 | Template Engine | ✅ Complete |
+| 8 | Project Details & Site Management | ✅ Complete |
+| 9 | Visual Page Builder | 🔜 Next |
+| 10 | Advanced Features & Launch | ⏳ Planned |
 
 ---
 
@@ -117,5 +128,5 @@
 
 ---
 
-**Last Updated:** February 9, 2026  
-**Phase:** Planning → Implementation Transition
+**Last Updated:** February 13, 2026  
+**Phase:** Phase 8 Complete → Phase 9 Next

@@ -1,6 +1,6 @@
 ### Authentication System Tests for SiteCraft API
 ### Base URL
-@baseUrl = http://localhost:5000/api/v1
+@baseUrl = http://localhost:5263/api/v1
 @tenantId = {{$guid}}
 
 ### Variables (will be set after requests)

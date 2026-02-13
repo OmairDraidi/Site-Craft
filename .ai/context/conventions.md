@@ -5,8 +5,9 @@
 - Components: PascalCase  
 - Hooks: useSomething  
 - Zustand stores: useSomethingStore  
-- Pages: lowercase-with-dashes  
-- API files: kebab-case  
+- Pages: PascalCase (e.g., ProjectsPage.tsx)
+- Services: kebab-case (e.g., template.service.ts)
+- Types: kebab-case (e.g., template.types.ts)
 - Variables: camelCase  
 - Constants: UPPER_SNAKE_CASE  
 
@@ -14,40 +15,41 @@
 - Classes: PascalCase  
 - Interfaces: IName  
 - Methods: PascalCase  
-- DTOs: PascalCase + DTO  
+- DTOs: PascalCaseDTO (e.g., TemplateDto, ProjectDto)
 - Database tables: PascalCase  
-- Columns: camelCase  
+- Columns: PascalCase (EF Core convention)
 
 ## 2. Folder Structure Rules
 
 ### Frontend
 ```
-src/
-  app/
-  features/
-  components/
-  lib/
-  store/
-  styles/
+sitecraft-client/src/
+  components/     # Reusable UI (common/, templates/, projects/)
+  pages/          # Route-level pages
+  services/       # API clients (axios)
+  stores/         # Zustand state stores
+  types/          # TypeScript interfaces
+  lib/            # Utilities
+  styles/         # Global styles
 ```
 
 ### Backend
 ```
-src/
-  SiteCraft.Api/
-  SiteCraft.Application/
-  SiteCraft.Domain/
-  SiteCraft.Infrastructure/
+backend/src/
+  SiteCraft.API/            # Controllers, Program.cs
+  SiteCraft.Application/    # DTOs, Interfaces
+  SiteCraft.Domain/         # Entities, Enums, Interfaces
+  SiteCraft.Infrastructure/ # Data, Repositories, Services, Middleware
 ```
 
 ## 3. API Conventions
 - RESTful endpoints
-- Versioning: /api/v1
-- Auth via JWT
-- Tenant included via header: X-Tenant
+- Versioning: /api/v1 (templates, projects) or /api (auth)
+- Auth via JWT Bearer token
+- Tenant included via header: X-Tenant-Id (dev) / subdomain (prod)
 - Responses:
-```
-{ success: true, data: ..., message: "" }
+```json
+{ "success": true, "data": ..., "message": "" }
 ```
 
 ## 4. Git Conventions
@@ -66,6 +68,6 @@ docs: update architecture
 
 ## 5. UI/UX Conventions
 - Dark mode first (black + gold)
-- Use shadcn/ui patterns
+- Glassmorphism effects on cards and panels
 - Spacing scale: 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96
 - Typography: Poppins (display) + Inter (body)

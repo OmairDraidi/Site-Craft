@@ -25,32 +25,40 @@ To maintain long-term consistency for AI agents working on the SiteCraft project
 - [Phase1_System_Analysis.md](../../plans/completed/Phase1_System_Analysis.md) — System analysis with UML/ERD
 - [SiteCraft_Brand_Identity.md](../../plans/SiteCraft_Brand_Identity.md) — Brand guidelines
 - [SiteCraft_Full_Wireframes.md](../../plans/SiteCraft_Full_Wireframes.md) — Wireframes
-- [SiteCraft_Full_AI_Prompts.md](../../plans/SiteCraft_Full_AI_Prompts.md) — Figma prompts
+- [LEGACY_PROJECT_SUMMARY.md](../../plans/LEGACY_PROJECT_SUMMARY.md) — Consolidated legacy docs
 - [conventions.md](./conventions.md) — Coding & naming conventions
 - [dev_context.md](./dev_context.md) — Full development context
 
 ---
 
-## 3. Recent Changes (February 2026)
-- ✅ Fixed PRD tech stack conflict (was Django/Next.js/PostgreSQL → now ASP.NET Core/React/MySQL)
-- ✅ Unified spacing scale across ui_context.md and Brand Identity (4-128px)
-- ✅ Clarified deployment strategy (VPS only, not AWS)
-- ✅ Restructured project folders to match Vibe Coding Handbook (ai/ → .ai/, Plan/ → plans/)
-- ✅ Created .ai/context/project.md and .ai/context/architecture.md as AI-optimized summaries
+## 3. Completed Phases (February 2026)
+- ✅ **Phase 1-5:** Planning, architecture, design, ERD, wireframes
+- ✅ **Phase 6 (Feb 10):** Environment setup, multi-tenancy (shared DB + TenantId), JWT authentication
+- ✅ **Phase 7 (Feb 12):** Template Engine — CRUD, favorites, premium system, 11 unit tests (100% pass)
+- ✅ **Phase 8 (Feb 13):** Project Details — CRUD, template linking, status management, inline editing
+- ✅ **Feb 13:** Documentation consolidation — legacy files moved to LEGACY_PROJECT_SUMMARY.md, plans/ reorganized
 
 ---
 
-## 4. Future Notes
-- Billing provider = Stripe (integration in Phase 6/7)
-- AI content generation = OpenAI GPT-4 API (Phase 7+)
+## 4. Current Status
+- **Active Phase:** Phase 9 (Visual Page Builder) — not started
+- **Backend running:** port 5000, MySQL 3306, Redis 6379
+- **Frontend running:** port 5173
+
+---
+
+## 5. Future Notes
+- Billing provider = Stripe (Phase 10)
+- AI content generation = OpenAI GPT-4 API (Phase 9-10)
 - Email provider = SendGrid or SMTP
 - File storage = Azure Blob Storage or S3-compatible
 - CDN = Consider Cloudflare for static assets (post-MVP)
-- Multi-language support = Planned for Phase 9+ (English + Arabic)
+- Multi-language support = Planned for Phase 10+ (English + Arabic)
+- Visual Page Builder = Phase 9 priority
 
 ---
 
-## 5. What NOT to Do
+## 6. What NOT to Do
 - ❌ Do NOT suggest Django, Next.js, or PostgreSQL (we use ASP.NET Core, React, MySQL)
 - ❌ Do NOT propose AWS deployment (we use VPS)
 - ❌ Do NOT use spacing values outside the 4-128px scale

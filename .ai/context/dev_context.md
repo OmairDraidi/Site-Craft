@@ -8,7 +8,6 @@ This file teaches AI agents how to write correct, consistent code for the **Site
 - Multi-tenant logic
 - API patterns
 - Folder structures
-- Naming conventions
 
 ---
 
@@ -16,32 +15,30 @@ This file teaches AI agents how to write correct, consistent code for the **Site
 
 ### Frontend (React)
 - React 19
-- Vite (build tool)
-- TypeScript
-- React Router 7.6
+- Vite 6 (build tool)
+- TypeScript 5.7
+- React Router 7
 - Tailwind CSS 3.4
-- React Query 5.x
-- Zustand
-- Axios
-- React Hook Form + Yup
-- shadcn/ui
-- Recharts
+- TanStack React Query 5
+- Zustand 5 (state management)
+- Axios (API client)
+- React Hook Form + Zod (forms + validation)
+- Lucide React (icons)
 
 ### Backend (ASP.NET Core)
 - ASP.NET Core 8
-- EF Core 8
+- EF Core 8 (Pomelo.MySql provider)
 - MySQL 8
 - Redis 7
-- Hangfire
-- Azure Blob Storage / S3-compatible
-- Serilog
-- Swashbuckle
+- BCrypt.Net (password hashing)
+- Serilog (logging)
+- Swashbuckle (Swagger)
 
 ### Deployment
-- Docker + Docker Compose
-- VPS hosting (Contabo/Hetzner)
-- Nginx reverse proxy with Let's Encrypt SSL
-- GitHub Actions (CI/CD)
+- Docker + Docker Compose (MySQL + Redis containers)
+- Backend: `dotnet run` on port 5000
+- Frontend: `npm run dev` on port 5173
+- VPS hosting planned (Contabo/Hetzner)
 
 ---
 
@@ -49,23 +46,23 @@ This file teaches AI agents how to write correct, consistent code for the **Site
 Follow Clean Architecture:
 
 ```
-src/
-  SiteCraft.Api            → Controllers, Middleware, Auth, Tenant Resolution
-  SiteCraft.Application    → Services, DTOs, Validations, Use Cases
-  SiteCraft.Domain         → Entities, Interfaces, Aggregates
-  SiteCraft.Infrastructure → EF Core, MySQL, Redis, S3, Hangfire, Logging
+backend/src/
+  SiteCraft.API            → Controllers, Middleware, Program.cs
+  SiteCraft.Application    → DTOs, Interfaces, Service contracts
+  SiteCraft.Domain         → Entities, Interfaces, Enums
+  SiteCraft.Infrastructure → EF Core, Repositories, Services, Middleware
 ```
 
 Frontend folder structure:
 
 ```
-src/
-  app/
-  features/
-  components/
-  lib/
-  store/
-  styles/
+sitecraft-client/src/
+  components/    → Reusable UI (common/, templates/, projects/)
+  pages/         → Route pages (DashboardPage, TemplatesPage, projects/)
+  services/      → API clients (template.service.ts, project.service.ts)
+  stores/        → Zustand stores (useAuthStore, useTemplateStore, useProjectStore)
+  types/         → TypeScript interfaces
+  lib/           → Utilities
 ```
 
 ---
@@ -76,14 +73,16 @@ src/
 AI must always assume:
 - Every backend endpoint expects a tenant context
 - Tenant ID is resolved via:
-  - Host (subdomain)
-  - Or header: `X-Tenant`
-- Every DB query must be filtered by TenantId
+  - Header: `X-Tenant-Id` (development)
+  - Subdomain: `demo.sitecraft.com` (production)
+- Every DB query is auto-filtered by TenantId (Global Query Filter)
 
 ### Tenant Data Isolation
-Use:
+Uses:
 - Shared Database
 - TenantId column on all tenant-scoped tables
+- Global Query Filter in EF Core
+- Auto-set TenantId on SaveChanges
 
 ---
 
@@ -92,15 +91,18 @@ Use:
 ### REST format:
 Endpoints:
 ```
-/api/v1/auth/login
+/api/auth/login
+/api/auth/register
+/api/auth/refresh
 /api/v1/templates
-/api/v1/sites
-/api/v1/domains
-/api/v1/billing
+/api/v1/templates/{id}/apply
+/api/v1/templates/{id}/favorite
+/api/v1/projects
+/api/v1/projects/{id}/apply-template
 ```
 
 Responses:
-```
+```json
 {
   "success": true,
   "message": "",
@@ -109,7 +111,7 @@ Responses:
 ```
 
 Errors:
-```
+```json
 {
   "success": false,
   "message": "Invalid credentials"
@@ -124,39 +126,39 @@ Errors:
 - Components: PascalCase
 - Hooks: useSomething()
 - Zustand stores: useSomethingStore
-- Files: kebab-case
+- Files: kebab-case (services, types) or PascalCase (pages, components)
 - Variables: camelCase
 
 ### Backend
 - Classes: PascalCase
 - Interfaces: IName
-- DTOs: SomethingDTO
+- DTOs: SomethingDto
 - Db tables: PascalCase
-- Columns: camelCase
+- Columns: PascalCase (EF Core)
 
 ---
 
 ## 7. Code Generation Standards
 
 ### Frontend
-- Use React Query for server state
-- Use Zustand for UI state
-- Forms = React Hook Form + Yup
-- Axios instance with interceptors
+- Use TanStack React Query for server state
+- Use Zustand for UI/client state
+- Forms = React Hook Form + Zod
+- Axios instance with interceptors (auth token auto-attach)
 
 ### Backend
-- Use Services inside Application layer
-- Controllers must be thin
+- Use Services inside Infrastructure layer (implements Application interfaces)
+- Controllers must be thin (delegate to services)
 - EF Core must be inside Infrastructure
-- Validation via FluentValidation
-- Background jobs in Hangfire
+- Validation via FluentValidation or data annotations
+- JWT claims for userId and tenantId
 
 ---
 
 ## 8. Security
 AI must enforce:
-- JWT auth
-- Tenant isolation
-- Avoid exposing secrets
-- Never generate insecure code
-
+- JWT auth on all protected endpoints
+- Tenant isolation (never leak cross-tenant data)
+- BCrypt for password hashing
+- Never expose secrets in code
+- Never generate insecure patterns
