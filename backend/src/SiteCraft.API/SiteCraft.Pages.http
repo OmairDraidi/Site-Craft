@@ -1,0 +1,60 @@
+@baseUrl = http://localhost:5263
+@tenantId = default
+@token = {{$dotenv TOKEN}}
+
+### 1. Get all pages for a site
+GET {{baseUrl}}/api/v1/pages?siteId={{$dotenv SITE_ID}}
+X-Tenant-Id: {{tenantId}}
+Authorization: Bearer {{token}}
+
+### 2. Create a new page
+POST {{baseUrl}}/api/v1/pages
+X-Tenant-Id: {{tenantId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Home Page",
+  "siteId": "{{$dotenv SITE_ID}}",
+  "metaDescription": "Welcome to our website",
+  "metaKeywords": "home, welcome, landing",
+  "pageData": "{\"sections\":[{\"id\":\"hero-1\",\"type\":\"hero\",\"components\":[{\"type\":\"heading\",\"content\":\"Welcome to SiteCraft\"}]}]}"
+}
+
+### 3. Get page details by ID
+GET {{baseUrl}}/api/v1/pages/{{$dotenv PAGE_ID}}
+X-Tenant-Id: {{tenantId}}
+Authorization: Bearer {{token}}
+
+### 4. Update a page
+PUT {{baseUrl}}/api/v1/pages/{{$dotenv PAGE_ID}}
+X-Tenant-Id: {{tenantId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Updated Home Page",
+  "metaDescription": "Updated welcome page description",
+  "metaKeywords": "home, welcome, updated",
+  "pageData": "{\"sections\":[{\"id\":\"hero-1\",\"type\":\"hero\",\"components\":[{\"type\":\"heading\",\"content\":\"Welcome to SiteCraft - Updated\"}]}]}"
+}
+
+### 5. Publish a page
+POST {{baseUrl}}/api/v1/pages/{{$dotenv PAGE_ID}}/publish
+X-Tenant-Id: {{tenantId}}
+Authorization: Bearer {{token}}
+
+### 6. Unpublish a page
+POST {{baseUrl}}/api/v1/pages/{{$dotenv PAGE_ID}}/unpublish
+X-Tenant-Id: {{tenantId}}
+Authorization: Bearer {{token}}
+
+### 7. Delete a page
+DELETE {{baseUrl}}/api/v1/pages/{{$dotenv PAGE_ID}}
+X-Tenant-Id: {{tenantId}}
+Authorization: Bearer {{token}}
+
+### 8. Get project pages (via ProjectsController)
+GET {{baseUrl}}/api/v1/projects/{{$dotenv PROJECT_ID}}/pages
+X-Tenant-Id: {{tenantId}}
+Authorization: Bearer {{token}}

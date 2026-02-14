@@ -22,6 +22,126 @@ namespace SiteCraft.Infrastructure.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("SiteCraft.Domain.Entities.Component", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsVisible")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
+
+                    b.Property<int>("Order")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<Guid>("PageId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PageId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Components", (string)null);
+                });
+
+            modelBuilder.Entity("SiteCraft.Domain.Entities.Page", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsPublished")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("MetaDescription")
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
+
+                    b.Property<string>("MetaKeywords")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<int>("Order")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("PageData")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("PublishedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("SiteId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<Guid?>("TemplateId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsPublished");
+
+                    b.HasIndex("SiteId");
+
+                    b.HasIndex("Slug");
+
+                    b.HasIndex("TemplateId");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("SiteId", "Slug")
+                        .IsUnique();
+
+                    b.ToTable("Pages", (string)null);
+                });
+
             modelBuilder.Entity("SiteCraft.Domain.Entities.Project", b =>
                 {
                     b.Property<Guid>("Id")
@@ -370,6 +490,35 @@ namespace SiteCraft.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("SiteCraft.Domain.Entities.Component", b =>
+                {
+                    b.HasOne("SiteCraft.Domain.Entities.Page", "Page")
+                        .WithMany("Components")
+                        .HasForeignKey("PageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Page");
+                });
+
+            modelBuilder.Entity("SiteCraft.Domain.Entities.Page", b =>
+                {
+                    b.HasOne("SiteCraft.Domain.Entities.Site", "Site")
+                        .WithMany("Pages")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SiteCraft.Domain.Entities.Template", "Template")
+                        .WithMany()
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Site");
+
+                    b.Navigation("Template");
+                });
+
             modelBuilder.Entity("SiteCraft.Domain.Entities.Project", b =>
                 {
                     b.HasOne("SiteCraft.Domain.Entities.Site", "Site")
@@ -480,8 +629,15 @@ namespace SiteCraft.Infrastructure.Migrations
                     b.Navigation("Tenant");
                 });
 
+            modelBuilder.Entity("SiteCraft.Domain.Entities.Page", b =>
+                {
+                    b.Navigation("Components");
+                });
+
             modelBuilder.Entity("SiteCraft.Domain.Entities.Site", b =>
                 {
+                    b.Navigation("Pages");
+
                     b.Navigation("Project");
                 });
 

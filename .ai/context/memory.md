@@ -42,7 +42,7 @@ To maintain long-term consistency for AI agents working on the SiteCraft project
 
 ## 4. Current Status
 - **Active Phase:** Phase 9 (Visual Page Builder) — not started
-- **Backend running:** port 5000, MySQL 3306, Redis 6379
+- **Backend running:** port 5263, MySQL 3306, Redis 6379
 - **Frontend running:** port 5173
 
 ---

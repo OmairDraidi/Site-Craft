@@ -15,15 +15,18 @@ namespace SiteCraft.API.Controllers;
 public class ProjectsController : ControllerBase
 {
     private readonly IProjectService _projectService;
+    private readonly IPageService _pageService;
     private readonly ITenantService _tenantService;
     private readonly ILogger<ProjectsController> _logger;
 
     public ProjectsController(
         IProjectService projectService,
+        IPageService pageService,
         ITenantService tenantService,
         ILogger<ProjectsController> logger)
     {
         _projectService = projectService;
+        _pageService = pageService;
         _tenantService = tenantService;
         _logger = logger;
     }
@@ -274,16 +277,40 @@ public class ProjectsController : ControllerBase
     }
 
     /// <summary>
-    /// Get project pages (placeholder for future)
+    /// Get all pages for a project's site
     /// </summary>
     [HttpGet("{id:guid}/pages")]
     [Authorize(Policy = Policies.RequireAuthenticatedUser)]
     public async Task<ActionResult<ApiResponse<object>>> GetProjectPages(Guid id)
     {
-        // TODO: Implement in Phase 9 (Page Builder)
-        await Task.CompletedTask;
-        return Ok(ApiResponse<object>.SuccessResponse(
-            new { pages = Array.Empty<object>(), message = "Coming soon" }, 
-            "Feature coming in Phase 9"));
+        try
+        {
+            var currentTenantId = _tenantService.GetCurrentTenantId();
+            if (!currentTenantId.HasValue)
+                return BadRequest(ApiResponse<object>.ErrorResponse("Tenant not found"));
+
+            var project = await _projectService.GetProjectByIdAsync(id);
+            if (project == null)
+                return NotFound(ApiResponse<object>.ErrorResponse("Project not found"));
+
+            if (!project.SiteId.HasValue)
+                return Ok(ApiResponse<object>.SuccessResponse(
+                    new { pages = Array.Empty<object>() },
+                    "No site associated with this project yet"));
+
+            var pages = await _pageService.GetPagesAsync(project.SiteId.Value, currentTenantId.Value);
+
+            _logger.LogInformation("Pages retrieved for project {ProjectId}. Count: {Count}", id, pages.Count());
+
+            return Ok(ApiResponse<object>.SuccessResponse(
+                new { pages },
+                "Project pages retrieved successfully"));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving pages for project {ProjectId}", id);
+            return StatusCode(500, ApiResponse<object>.ErrorResponse(
+                "An error occurred while retrieving project pages"));
+        }
     }
 }

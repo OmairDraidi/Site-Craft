@@ -23,4 +23,5 @@ public class Site : ITenantEntity
     public User User { get; set; } = null!;
     public Project? Project { get; set; }
     public Template? Template { get; set; }
+    public ICollection<Page> Pages { get; set; } = new List<Page>();
 }

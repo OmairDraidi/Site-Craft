@@ -16,31 +16,35 @@ Additionally, it introduces **Site Customization** — allowing tenants to defin
 
 ## Task Breakdown
 
-### Task 1: Page Entity + Backend API (F04.9, F04.10, F04.11, F04.13)
+### Task 1: Page Entity + Backend API (F04.9, F04.10, F04.11, F04.13) ✅ COMPLETE
 
 **Goal:** Create the Page entity, CRUD endpoints, and JSON page storage.
 
 **Backend:**
-- `Page` entity: Id, TenantId, SiteId, Title, Slug, MetaDescription, MetaKeywords, IsPublished, PublishedAt, PageData (JSON), TemplateId, CreatedAt, UpdatedAt
-- `Component` entity: Id, TenantId, PageId, Type, Content (JSON), Order, IsVisible, CreatedAt, UpdatedAt
-- `IPageRepository` + `PageRepository`
-- `IPageService` + `PageService` (CRUD + Publish/Unpublish + Slug generation)
-- `PagesController` — 7 endpoints
-- Auto-slug generation per tenant (unique)
-- Draft/Published states
+- ✅ `Page` entity: Id, TenantId, SiteId, Title, Slug, MetaDescription, MetaKeywords, IsPublished, PublishedAt, PageData (JSON), TemplateId, CreatedAt, UpdatedAt
+- ✅ `Component` entity: Id, TenantId, PageId, Type, Content (JSON), Order, IsVisible, CreatedAt, UpdatedAt
+- ✅ `IPageRepository` + `PageRepository`
+- ✅ `IPageService` + `PageService` (CRUD + Publish/Unpublish + Slug generation)
+- ✅ `PagesController` — 7 endpoints
+- ✅ Auto-slug generation per tenant (unique per site)
+- ✅ Draft/Published states
+- ✅ 12 unit tests (all passing)
+- ✅ Migration applied successfully
 
 **Endpoints:**
 ```
-GET    /api/v1/pages              — List pages
-POST   /api/v1/pages              — Create page
-GET    /api/v1/pages/{id}         — Page details
-PUT    /api/v1/pages/{id}         — Update page (save JSON)
-DELETE /api/v1/pages/{id}         — Delete page
-POST   /api/v1/pages/{id}/publish   — Publish
-POST   /api/v1/pages/{id}/unpublish — Unpublish
+GET    /api/v1/pages?siteId={id}  — List pages (implemented)
+POST   /api/v1/pages              — Create page (implemented)
+GET    /api/v1/pages/{id}         — Page details (implemented)
+PUT    /api/v1/pages/{id}         — Update page (save JSON) (implemented)
+DELETE /api/v1/pages/{id}         — Delete page (implemented)
+POST   /api/v1/pages/{id}/publish   — Publish (implemented)
+POST   /api/v1/pages/{id}/unpublish — Unpublish (implemented)
 ```
 
-**Database:** EF Core migration
+**Database:** EF Core migration `AddPagesAndComponents` - Tables: `Pages`, `Components`
+
+**Completed:** February 14, 2026
 
 ---
 

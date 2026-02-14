@@ -25,9 +25,10 @@
 3. [Tenants Endpoints](#-tenants-endpoints)
 4. [Templates Endpoints](#-templates-endpoints)
 5. [Projects Endpoints](#-projects-endpoints)
-6. [Response Format](#-response-format)
-7. [Error Codes](#-error-codes)
-8. [Frontend Integration Examples](#-frontend-integration-examples)
+6. [Pages Endpoints](#-pages-endpoints)
+7. [Response Format](#-response-format)
+8. [Error Codes](#-error-codes)
+9. [Frontend Integration Examples](#-frontend-integration-examples)
 
 ---
 
@@ -1231,6 +1232,575 @@ await projectService.deleteProject(projectId);
 
 ---
 
+## 📄 Pages Endpoints
+
+Pages represent individual web pages within a site. Each page has a unique slug, SEO metadata, publish state, and JSON-based content structure (`PageData`) for the visual builder.
+
+### 1. Get All Pages for a Site
+
+**Endpoint:** `GET /api/v1/pages?siteId={siteId}`
+
+**Authentication:** ✅ Required
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_token_here
+```
+
+**Query Parameters:**
+```
+siteId (required) - GUID of the site
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Pages retrieved successfully",
+  "data": [
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "title": "Home",
+      "slug": "home",
+      "isPublished": true,
+      "publishedAt": "2026-02-14T10:00:00Z",
+      "order": 0,
+      "createdAt": "2026-02-14T09:00:00Z",
+      "updatedAt": "2026-02-14T10:00:00Z"
+    },
+    {
+      "id": "4fb85f64-5717-4562-b3fc-2c963f66afb7",
+      "title": "About",
+      "slug": "about",
+      "isPublished": false,
+      "publishedAt": null,
+      "order": 1,
+      "createdAt": "2026-02-14T09:30:00Z",
+      "updatedAt": null
+    }
+  ]
+}
+```
+
+**Error Response (400):**
+```json
+{
+  "success": false,
+  "message": "Site ID is required"
+}
+```
+
+**cURL Example:**
+```bash
+curl -X GET "http://localhost:5263/api/v1/pages?siteId=3fa85f64-5717-4562-b3fc-2c963f66afa6" \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here"
+```
+
+---
+
+### 2. Get Page by ID
+
+**Endpoint:** `GET /api/v1/pages/{id}`
+
+**Authentication:** ✅ Required
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_token_here
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Page retrieved successfully",
+  "data": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "siteId": "2ea85f64-5717-4562-b3fc-2c963f66afa5",
+    "templateId": "1da85f64-5717-4562-b3fc-2c963f66afa4",
+    "title": "Home Page",
+    "slug": "home",
+    "metaDescription": "Welcome to our website",
+    "metaKeywords": "home, welcome, landing",
+    "isPublished": true,
+    "publishedAt": "2026-02-14T10:00:00Z",
+    "pageData": "{\"sections\":[{\"id\":\"hero-1\",\"type\":\"hero\",\"components\":[{\"type\":\"heading\",\"content\":\"Welcome\"}]}]}",
+    "order": 0,
+    "componentCount": 3,
+    "createdAt": "2026-02-14T09:00:00Z",
+    "updatedAt": "2026-02-14T10:00:00Z"
+  }
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Page not found"
+}
+```
+
+**cURL Example:**
+```bash
+curl -X GET http://localhost:5263/api/v1/pages/3fa85f64-5717-4562-b3fc-2c963f66afa6 \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here"
+```
+
+---
+
+### 3. Create Page
+
+**Endpoint:** `POST /api/v1/pages`
+
+**Authentication:** ✅ Required
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_token_here
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "title": "Home Page",
+  "siteId": "2ea85f64-5717-4562-b3fc-2c963f66afa5",
+  "templateId": "1da85f64-5717-4562-b3fc-2c963f66afa4",
+  "metaDescription": "Welcome to our website",
+  "metaKeywords": "home, welcome, landing",
+  "pageData": "{\"sections\":[{\"id\":\"hero-1\",\"type\":\"hero\",\"components\":[{\"type\":\"heading\",\"content\":\"Welcome to SiteCraft\"}]}]}"
+}
+```
+
+**Validation Rules:**
+- `title`: Required, max 200 characters
+- `siteId`: Required, must be a valid GUID
+- `templateId`: Optional GUID
+- `metaDescription`: Optional, max 300 characters
+- `metaKeywords`: Optional, max 500 characters
+- `pageData`: Optional, defaults to `{"sections":[]}`
+
+**Success Response (201 Created):**
+```json
+{
+  "success": true,
+  "message": "Page created successfully",
+  "data": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "siteId": "2ea85f64-5717-4562-b3fc-2c963f66afa5",
+    "templateId": "1da85f64-5717-4562-b3fc-2c963f66afa4",
+    "title": "Home Page",
+    "slug": "home-page",
+    "metaDescription": "Welcome to our website",
+    "metaKeywords": "home, welcome, landing",
+    "isPublished": false,
+    "publishedAt": null,
+    "pageData": "{\"sections\":[...]}",
+    "order": 0,
+    "componentCount": 0,
+    "createdAt": "2026-02-14T10:00:00Z",
+    "updatedAt": null
+  }
+}
+```
+
+**Slug Generation:**
+- Automatically generated from title
+- Converted to lowercase
+- Spaces replaced with hyphens
+- Special characters removed
+- Uniqueness enforced per site (appends `-2`, `-3`, etc. if duplicate)
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Site with ID {siteId} not found"
+}
+```
+
+**Error Response (403):**
+```json
+{
+  "success": false,
+  "message": "You do not have permission to create pages for this site"
+}
+```
+
+**cURL Example:**
+```bash
+curl -X POST http://localhost:5263/api/v1/pages \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Home Page",
+    "siteId": "2ea85f64-5717-4562-b3fc-2c963f66afa5",
+    "metaDescription": "Welcome to our website"
+  }'
+```
+
+---
+
+### 4. Update Page
+
+**Endpoint:** `PUT /api/v1/pages/{id}`
+
+**Authentication:** ✅ Required (must be site owner)
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_token_here
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "title": "Updated Home Page",
+  "metaDescription": "Updated welcome page description",
+  "metaKeywords": "home, welcome, updated",
+  "pageData": "{\"sections\":[{\"id\":\"hero-1\",\"type\":\"hero\",\"components\":[{\"type\":\"heading\",\"content\":\"Welcome to SiteCraft - Updated\"}]}]}"
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Page updated successfully",
+  "data": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "siteId": "2ea85f64-5717-4562-b3fc-2c963f66afa5",
+    "templateId": "1da85f64-5717-4562-b3fc-2c963f66afa4",
+    "title": "Updated Home Page",
+    "slug": "updated-home-page",
+    "metaDescription": "Updated welcome page description",
+    "metaKeywords": "home, welcome, updated",
+    "isPublished": false,
+    "publishedAt": null,
+    "pageData": "{\"sections\":[...]}",
+    "order": 0,
+    "componentCount": 1,
+    "createdAt": "2026-02-14T10:00:00Z",
+    "updatedAt": "2026-02-14T11:30:00Z"
+  }
+}
+```
+
+**Slug Behavior:**
+- If title changes, slug is automatically regenerated
+- Uniqueness is maintained (excludes current page from duplicate check)
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Page with ID {id} not found"
+}
+```
+
+**Error Response (403):**
+```json
+{
+  "success": false,
+  "message": "You do not have permission to update this page"
+}
+```
+
+**cURL Example:**
+```bash
+curl -X PUT http://localhost:5263/api/v1/pages/3fa85f64-5717-4562-b3fc-2c963f66afa6 \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Updated Home Page",
+    "metaDescription": "Updated description",
+    "pageData": "{\"sections\":[]}"
+  }'
+```
+
+---
+
+### 5. Delete Page
+
+**Endpoint:** `DELETE /api/v1/pages/{id}`
+
+**Authentication:** ✅ Required (must be site owner)
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_token_here
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Page deleted successfully",
+  "data": null
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Page not found"
+}
+```
+
+**Error Response (403):**
+```json
+{
+  "success": false,
+  "message": "You do not have permission to delete this page"
+}
+```
+
+**Notes:**
+- Deleting a page also cascades to delete all associated components
+- Published pages can be deleted (consider adding a confirmation in UI)
+
+**cURL Example:**
+```bash
+curl -X DELETE http://localhost:5263/api/v1/pages/3fa85f64-5717-4562-b3fc-2c963f66afa6 \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here"
+```
+
+---
+
+### 6. Publish Page
+
+**Endpoint:** `POST /api/v1/pages/{id}/publish`
+
+**Authentication:** ✅ Required (must be site owner)
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_token_here
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Page published successfully",
+  "data": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "siteId": "2ea85f64-5717-4562-b3fc-2c963f66afa5",
+    "title": "Home Page",
+    "slug": "home-page",
+    "isPublished": true,
+    "publishedAt": "2026-02-14T12:00:00Z",
+    "pageData": "{\"sections\":[...]}",
+    "order": 0,
+    "componentCount": 3,
+    "createdAt": "2026-02-14T10:00:00Z",
+    "updatedAt": "2026-02-14T12:00:00Z"
+  }
+}
+```
+
+**Behavior:**
+- Sets `isPublished = true`
+- Sets `publishedAt = DateTime.UtcNow`
+- Updates `updatedAt` timestamp
+- Page becomes publicly visible (frontend implementation required)
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Page with ID {id} not found"
+}
+```
+
+**Error Response (403):**
+```json
+{
+  "success": false,
+  "message": "You do not have permission to publish this page"
+}
+```
+
+**cURL Example:**
+```bash
+curl -X POST http://localhost:5263/api/v1/pages/3fa85f64-5717-4562-b3fc-2c963f66afa6/publish \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here"
+```
+
+---
+
+### 7. Unpublish Page
+
+**Endpoint:** `POST /api/v1/pages/{id}/unpublish`
+
+**Authentication:** ✅ Required (must be site owner)
+
+**Headers:**
+```http
+X-Tenant-Id: default
+Authorization: Bearer your_token_here
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Page unpublished successfully",
+  "data": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "siteId": "2ea85f64-5717-4562-b3fc-2c963f66afa5",
+    "title": "Home Page",
+    "slug": "home-page",
+    "isPublished": false,
+    "publishedAt": null,
+    "pageData": "{\"sections\":[...]}",
+    "order": 0,
+    "componentCount": 3,
+    "createdAt": "2026-02-14T10:00:00Z",
+    "updatedAt": "2026-02-14T13:00:00Z"
+  }
+}
+```
+
+**Behavior:**
+- Sets `isPublished = false`
+- Sets `publishedAt = null`
+- Updates `updatedAt` timestamp
+- Page becomes draft (not publicly visible)
+
+**Error Response (404):**
+```json
+{
+  "success": false,
+  "message": "Page with ID {id} not found"
+}
+```
+
+**Error Response (403):**
+```json
+{
+  "success": false,
+  "message": "You do not have permission to unpublish this page"
+}
+```
+
+**cURL Example:**
+```bash
+curl -X POST http://localhost:5263/api/v1/pages/3fa85f64-5717-4562-b3fc-2c963f66afa6/unpublish \
+  -H "X-Tenant-Id: default" \
+  -H "Authorization: Bearer your_token_here"
+```
+
+---
+
+### Page Ownership & Permissions
+
+- ✅ Pages are owned through their parent Site
+- ✅ Only the site owner can create/update/delete/publish pages
+- ✅ Pages are tenant-scoped (multi-tenancy supported)
+- ✅ Slug uniqueness is enforced per site (not per tenant)
+- ✅ `UpdatedAt` timestamp automatically set when page is modified
+
+### PageData JSON Structure
+
+The `pageData` field stores the complete page structure as JSON:
+
+```json
+{
+  "sections": [
+    {
+      "id": "hero-1",
+      "type": "hero",
+      "order": 0,
+      "visible": true,
+      "components": [
+        {
+          "id": "heading-1",
+          "type": "heading",
+          "content": "Welcome to SiteCraft",
+          "styles": {
+            "fontSize": "48px",
+            "fontWeight": "bold",
+            "color": "#111111"
+          }
+        },
+        {
+          "id": "button-1",
+          "type": "button",
+          "content": "Get Started",
+          "styles": {
+            "backgroundColor": "#F6C453",
+            "color": "#111111",
+            "padding": "12px 24px"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Component Types
+
+Supported component types in `pageData`:
+- `heading` - Text headings (H1-H6)
+- `text` - Paragraph text
+- `button` - Call-to-action buttons
+- `image` - Images with alt text
+- `video` - Embedded videos
+- `form` - Contact/lead forms
+- `icon` - Icon elements
+
+### TypeScript Example
+
+```typescript
+import { pageService } from '@/services/page.service';
+
+// Get all pages for a site
+const pages = await pageService.getPagesBySite(siteId);
+
+// Create a new page
+const newPage = await pageService.createPage({
+  title: 'Home Page',
+  siteId: siteId,
+  metaDescription: 'Welcome page',
+  pageData: JSON.stringify({ sections: [] })
+});
+
+// Update page content (save from builder)
+const updated = await pageService.updatePage(pageId, {
+  title: 'Updated Home',
+  metaDescription: 'New description',
+  pageData: JSON.stringify(builderData)
+});
+
+// Publish page
+await pageService.publishPage(pageId);
+
+// Unpublish page
+await pageService.unpublishPage(pageId);
+
+// Delete page
+await pageService.deletePage(pageId);
+```
+
+---
+
 ## �📦 Response Format
 
 ### Standard Success Response
@@ -1463,6 +2033,9 @@ await apiClient.get('/api/v1/users', {
 - **Password Reset Token:** Valid for 1 hour
 - **Rate Limiting:** 10 requests/minute, 30 requests/5 minutes, 100 requests/hour on auth endpoints
 - **CORS:** Configured for `localhost:5173`, `localhost:5174`, `localhost:3000`
+- **Page Slugs:** Auto-generated from title, unique per site (not per tenant)
+- **PageData Format:** JSON string stored in database, parsed by frontend builder
+- **Page Ownership:** Validated through site ownership (user must own the site)
 
 ---
 

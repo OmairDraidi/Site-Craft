@@ -108,6 +108,7 @@ builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
 builder.Services.AddScoped<ISiteRepository, SiteRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IPageRepository, PageRepository>();
 
 // Add Application Services
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
@@ -115,6 +116,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenBlacklistService, TokenBlacklistService>();
 builder.Services.AddScoped<ITemplateService, TemplateService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IPageService, PageService>();
 
 // Add Background Services
 builder.Services.AddHostedService<ConfigurationValidationService>(); // Validates configuration on startup
