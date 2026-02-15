@@ -68,6 +68,105 @@ namespace SiteCraft.Infrastructure.Migrations
                     b.ToTable("Components", (string)null);
                 });
 
+            modelBuilder.Entity("SiteCraft.Domain.Entities.Menu", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<Guid>("SiteId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("SiteId", "Name", "Location")
+                        .IsUnique();
+
+                    b.ToTable("Menus", (string)null);
+                });
+
+            modelBuilder.Entity("SiteCraft.Domain.Entities.MenuItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsVisible")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<Guid>("MenuId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Order")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Target")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasDefaultValue("_self");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MenuId");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("MenuItems", (string)null);
+                });
+
             modelBuilder.Entity("SiteCraft.Domain.Entities.Page", b =>
                 {
                     b.Property<Guid>("Id")
@@ -243,24 +342,55 @@ namespace SiteCraft.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("BodyFontFamily")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ContactInfo")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("FaviconUrl")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("HeadingFontFamily")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint(1)")
                         .HasDefaultValue(true);
 
+                    b.Property<string>("LogoUrl")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
+                    b.Property<string>("PrimaryColor")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<Guid?>("ProjectId")
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("SecondaryColor")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("SiteData")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SocialLinks")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Tagline")
                         .HasColumnType("longtext");
 
                     b.Property<Guid?>("TemplateId")
@@ -501,6 +631,35 @@ namespace SiteCraft.Infrastructure.Migrations
                     b.Navigation("Page");
                 });
 
+            modelBuilder.Entity("SiteCraft.Domain.Entities.Menu", b =>
+                {
+                    b.HasOne("SiteCraft.Domain.Entities.Site", "Site")
+                        .WithMany()
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
+                });
+
+            modelBuilder.Entity("SiteCraft.Domain.Entities.MenuItem", b =>
+                {
+                    b.HasOne("SiteCraft.Domain.Entities.Menu", "Menu")
+                        .WithMany("Items")
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SiteCraft.Domain.Entities.MenuItem", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Menu");
+
+                    b.Navigation("Parent");
+                });
+
             modelBuilder.Entity("SiteCraft.Domain.Entities.Page", b =>
                 {
                     b.HasOne("SiteCraft.Domain.Entities.Site", "Site")
@@ -627,6 +786,16 @@ namespace SiteCraft.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("SiteCraft.Domain.Entities.Menu", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("SiteCraft.Domain.Entities.MenuItem", b =>
+                {
+                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("SiteCraft.Domain.Entities.Page", b =>

@@ -67,6 +67,30 @@ export const API_ENDPOINTS = {
     PAGES: (id: string) => `/api/v1/projects/${id}/pages`,
   },
   
+  // 📄 Pages
+  PAGES: {
+    LIST: '/api/v1/pages',
+    BY_ID: (id: string) => `/api/v1/pages/${id}`,
+    PUBLISH: (id: string) => `/api/v1/pages/${id}/publish`,
+    UNPUBLISH: (id: string) => `/api/v1/pages/${id}/unpublish`,
+  },
+
+  // � Menus
+  MENUS: {
+    LIST: '/api/v1/menus',
+    BY_ID: (id: string) => `/api/v1/menus/${id}`,
+    CREATE_ITEM: (id: string) => `/api/v1/menus/${id}/items`,
+    UPDATE_ITEM: (id: string) => `/api/v1/menus/items/${id}`,
+    DELETE_ITEM: (id: string) => `/api/v1/menus/items/${id}`,
+    REORDER: (id: string) => `/api/v1/menus/${id}/reorder`,
+  },
+
+  // �🌐 Sites
+  SITES: {
+    BY_ID: (id: string) => `/api/v1/sites/${id}`,
+    UPLOAD: (id: string, type: 'logo' | 'favicon') => `/api/v1/sites/${id}/upload?type=${type}`,
+  },
+  
   // 🏥 Health
   HEALTH: '/api/health',
 } as const;

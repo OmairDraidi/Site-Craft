@@ -109,6 +109,7 @@ builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
 builder.Services.AddScoped<ISiteRepository, SiteRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IPageRepository, PageRepository>();
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 
 // Add Application Services
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
@@ -117,6 +118,8 @@ builder.Services.AddScoped<ITokenBlacklistService, TokenBlacklistService>();
 builder.Services.AddScoped<ITemplateService, TemplateService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IPageService, PageService>();
+builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<IMenuService, MenuService>();
 
 // Add Background Services
 builder.Services.AddHostedService<ConfigurationValidationService>(); // Validates configuration on startup
@@ -224,6 +227,9 @@ app.UseMiddleware<TenantResolutionMiddleware>();
 
 // HTTPS Redirection (optional in development)
 // app.UseHttpsRedirection();
+
+// Static Files (for uploaded logos/favicons)
+app.UseStaticFiles();
 
 // Authentication & Authorization
 app.UseAuthentication();

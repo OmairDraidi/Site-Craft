@@ -6,12 +6,16 @@ import {
   Settings,
   Globe,
   Trash2,
-  ChevronRight
+  ChevronRight,
+  Menu,
+  Palette
 } from 'lucide-react';
 import { useProjectStore } from '@/stores/useProjectStore';
+import { pageService } from '@/services/page.service';
 import { DevicePreview } from '@/components/templates';
-import { ProjectStatusBadge, TemplateSelector, ConfirmDeleteModal } from '@/components/projects';
+import { ProjectStatusBadge, TemplateSelector, ConfirmDeleteModal, PreviewModal } from '@/components/projects';
 import type { ProjectStatus } from '@/types/project.types';
+import type { Page } from '@/types/builder.types';
 
 export const ProjectDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,11 +36,15 @@ export const ProjectDetailsPage = () => {
   const [isTemplateSelectorOpen, setIsTemplateSelectorOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isOpeningBuilder, setIsOpeningBuilder] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<ProjectStatus>('Draft');
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState('');
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [editedDescription, setEditedDescription] = useState('');
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [previewPages, setPreviewPages] = useState<Page[]>([]);
+  const [isLoadingPages, setIsLoadingPages] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -120,8 +128,54 @@ export const ProjectDetailsPage = () => {
     }
   };
 
-  const handleOpenBuilder = () => {
-    alert('Site Builder coming in Phase 9!');
+  const handleOpenBuilder = async () => {
+    if (!selectedProject?.siteId) {
+      toast.error('No site found for this project');
+      return;
+    }
+
+    setIsOpeningBuilder(true);
+    try {
+      // Fetch pages for this project's site
+      const pages = await pageService.getPagesBySite(selectedProject.siteId);
+      
+      if (pages.length > 0) {
+        // Open first page in builder
+        navigate(`/builder/${pages[0].id}`);
+      } else {
+        // Create new page automatically
+        toast.info('Creating your first page...');
+        const newPage = await pageService.createPage({
+          siteId: selectedProject.siteId,
+          title: 'Home',
+          metaDescription: 'Home page',
+        });
+        navigate(`/builder/${newPage.id}`);
+      }
+    } catch (error) {
+      console.error('Failed to open builder:', error);
+      toast.error('Failed to open builder. Please try again.');
+      setIsOpeningBuilder(false);
+    }
+  };
+
+  const handleOpenPreview = async () => {
+    if (!selectedProject?.siteId) {
+      toast.error('No site found for this project');
+      return;
+    }
+
+    setIsLoadingPages(true);
+    try {
+      const pages = await pageService.getPagesBySite(selectedProject.siteId);
+      setPreviewPages(pages);
+      setIsPreviewModalOpen(true);
+    } catch (error) {
+      console.error('Failed to load pages:', error);
+      toast.error('Failed to load pages. Please try again.');
+    } finally {
+      setIsLoadingPages(false);
+    }
   };
 
   if (isLoading && !selectedProject) {
@@ -344,13 +398,14 @@ export const ProjectDetailsPage = () => {
                 {/* Open Builder - Primary CTA */}
                 <button
                   onClick={handleOpenBuilder}
-                  className="w-full relative group"
+                  disabled={isOpeningBuilder}
+                  className="w-full relative group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="absolute inset-0 bg-[#F6C453] blur-2xl opacity-20 group-hover:opacity-40 transition-opacity" />
                   <div className="relative flex items-center justify-between p-1 bg-gradient-to-br from-[#F6C453] to-[#CBA34E] rounded-2xl overflow-hidden shadow-2xl">
                     <div className="flex-1 py-4 px-6 flex items-center justify-center">
                       <span className="text-black text-base font-black uppercase tracking-widest">
-                        Open Builder
+                        {isOpeningBuilder ? 'Opening...' : 'Open Builder'}
                       </span>
                     </div>
                     <div className="p-4 bg-black/10 backdrop-blur-xl">
@@ -361,10 +416,29 @@ export const ProjectDetailsPage = () => {
 
                 {/* Preview Site */}
                 <button
-                  onClick={() => alert('Preview coming soon')}
-                  className="w-full px-6 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-black rounded-2xl transition-all text-sm uppercase tracking-wider"
+                  onClick={handleOpenPreview}
+                  disabled={isLoadingPages}
+                  className="w-full px-6 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-black rounded-2xl transition-all text-sm uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Preview Site
+                  {isLoadingPages ? 'Loading...' : 'Preview Site'}
+                </button>
+
+                {/* Navigation Builder */}
+                <button
+                  onClick={() => navigate(`/projects/${selectedProject.id}/navigation`)}
+                  className="w-full px-6 py-4 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 font-black rounded-2xl transition-all text-sm uppercase tracking-wider flex items-center justify-center gap-2"
+                >
+                  <Menu size={16} />
+                  Navigation Builder
+                </button>
+
+                {/* Site Settings */}
+                <button
+                  onClick={() => navigate(`/projects/${selectedProject.id}/branding`)}
+                  className="w-full px-6 py-4 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-400 font-black rounded-2xl transition-all text-sm uppercase tracking-wider flex items-center justify-center gap-2"
+                >
+                  <Palette size={16} />
+                  Site Settings
                 </button>
 
                 {/* Delete */}
@@ -404,6 +478,13 @@ export const ProjectDetailsPage = () => {
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleDelete}
         isDeleting={isDeleting}
+      />
+
+      <PreviewModal
+        isOpen={isPreviewModalOpen}
+        onClose={() => setIsPreviewModalOpen(false)}
+        pages={previewPages}
+        projectName={selectedProject.name}
       />
     </div>
   );

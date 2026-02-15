@@ -61,23 +61,28 @@
 - ✅ **Status Management:** Active/Archived/Draft status tracking
 - ✅ **Inline Editing:** Edit project details inline
 
-### Phase 9-10 (Advanced — 🔜 Next)
-- 🔜 Visual page builder (drag-and-drop)
-- ⏳ Custom domain mapping + SSL
+### Phase 9 (Site Builder — ✅ Complete)
+- ✅ **Visual Page Builder:** Drag-and-drop editor, component library, undo/redo
+- ✅ **Navigation Builder:** Menu management, nested items, reordering
+- ✅ **Branding:** Logo upload, color picker, font selector, SEO controls
+
+### Phase 10 (Advanced Modules — 🔜 Current)
+- 🔜 **Courses Module:** Course CRUD, lessons management, student enrollment
+- 🔜 **Blog Module:** Articles, categories, tags, scheduling
+- 🔜 **Module System:** Enable/disable modules per site
 - ⏳ Analytics dashboard
 - ⏳ Advanced AI features (SEO, content optimization)
-- ⏳ Multi-language support (English, Arabic)
 
 ---
 
 ## Current Phase
 
-**Phase 8 → Phase 9 Transition (February 2026)**
+**Phase 9 → Phase 10 Transition (February 2026)**
 
 **Status:**
-- Phases 1-8 are **complete**
-- Next milestone: Visual page builder
-- All core CRUD flows working end-to-end
+- Phases 1-9 are **complete**
+- Next milestone: Courses & Blog Modules + Activation System
+- Goal: Add vertical-specific functionality (Education & Content)
 
 ---
 
@@ -86,7 +91,7 @@
 - **Frontend:** React 19 + Vite + TypeScript + Tailwind CSS
 - **Backend:** ASP.NET Core 8 + Clean Architecture
 - **Database:** MySQL 8 + Redis (caching)
-- **AI:** OpenAI GPT-4 API (planned)
+- **AI:** OpenAI GPT-4 API (planned for Phase 11)
 - **Deployment:** Docker Compose on VPS (Contabo/Hetzner)
 - **Auth:** JWT with multi-tenant middleware
 
@@ -104,8 +109,8 @@
 | 6 | Environment + Multi-Tenancy + Auth | ✅ Complete |
 | 7 | Template Engine | ✅ Complete |
 | 8 | Project Details & Site Management | ✅ Complete |
-| 9 | Visual Page Builder | 🔜 Next |
-| 10 | Advanced Features & Launch | ⏳ Planned |
+| 9 | Visual Page Builder + Branding | ✅ Complete |
+| 10 | Advanced Modules (Courses, Blog) | 🔜 Current |
 
 ---
 

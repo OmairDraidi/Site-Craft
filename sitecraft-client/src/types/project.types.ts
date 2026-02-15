@@ -23,6 +23,7 @@ export interface ProjectListItem {
   id: string;
   templateId: string | null;
   templateName: string | null;
+  siteId?: string | null;
   name: string;
   description: string;
   status: ProjectStatus;

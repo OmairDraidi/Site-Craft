@@ -29,8 +29,12 @@ export const PrivateRoute = () => {
     return <Navigate to="/login" replace />;
   }
 
-  // Render child routes
-  return <Outlet />;
+  // Render child routes with full height container
+  return (
+    <div className="min-h-screen">
+      <Outlet />
+    </div>
+  );
 };
 
 export default PrivateRoute;

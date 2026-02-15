@@ -11,6 +11,10 @@ import { TemplatesPage } from './pages/TemplatesPage';
 import { TemplateDetailsPage } from './pages/templates/TemplateDetailsPage';
 import { ProjectsPage } from './pages/projects/ProjectsPage';
 import { ProjectDetailsPage } from './pages/projects/ProjectDetailsPage';
+import { BuilderPage } from './pages/builder/BuilderPage';
+import { BrandingPage } from './pages/settings/BrandingPage';
+import { NavigationPage } from './pages/NavigationPage';
+import { ProfilePage } from './pages/ProfilePage';
 
 // Temporary Landing Page
 const LandingPage = () => (
@@ -83,7 +87,18 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/projects/:id" element={<ProjectDetailsPage />} />
-            <Route path="/profile" element={<div>Profile Page (UI Coming Soon)</div>} />
+            
+            {/* Project-scoped nested routes */}
+            <Route path="/projects/:projectId/builder/:pageId" element={<BuilderPage />} />
+            <Route path="/projects/:projectId/navigation" element={<NavigationPage />} />
+            <Route path="/projects/:projectId/branding" element={<BrandingPage />} />
+            
+            {/* Legacy routes - redirect to new structure */}
+            <Route path="/builder/:pageId" element={<BuilderPage />} />
+            <Route path="/navigation" element={<NavigationPage />} />
+            <Route path="/settings/branding/:siteId" element={<BrandingPage />} />
+            
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
 
           {/* Catch all - redirect to home */}

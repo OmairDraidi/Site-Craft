@@ -18,6 +18,17 @@ public class Site : ITenantEntity
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
     
+    // Branding Fields
+    public string? LogoUrl { get; set; }
+    public string? FaviconUrl { get; set; }
+    public string PrimaryColor { get; set; } = "#000000";
+    public string SecondaryColor { get; set; } = "#ffffff";
+    public string HeadingFontFamily { get; set; } = "Inter";
+    public string BodyFontFamily { get; set; } = "Roboto";
+    public string? SocialLinks { get; set; } // JSON: { "facebook": "url", "twitter": "url", ... }
+    public string? ContactInfo { get; set; } // JSON: { "email": "...", "phone": "...", "address": "..." }
+    public string? Tagline { get; set; }
+    
     // Navigation Properties
     public Tenant Tenant { get; set; } = null!;
     public User User { get; set; } = null!;

@@ -94,16 +94,31 @@ public class PageService : IPageService
         if (site == null || site.UserId != userId)
             throw new UnauthorizedAccessException("You do not have permission to update this page");
 
-        // Regenerate slug if title changed
-        if (page.Title != request.Title)
+        // Only update fields that are provided (partial update support)
+        if (!string.IsNullOrWhiteSpace(request.Title))
         {
-            page.Slug = await GenerateUniqueSlugAsync(request.Title, page.SiteId, page.Id);
+            // Regenerate slug if title changed
+            if (page.Title != request.Title)
+            {
+                page.Slug = await GenerateUniqueSlugAsync(request.Title, page.SiteId, page.Id);
+            }
+            page.Title = request.Title;
         }
 
-        page.Title = request.Title;
-        page.MetaDescription = request.MetaDescription;
-        page.MetaKeywords = request.MetaKeywords;
-        page.PageData = request.PageData;
+        if (request.MetaDescription != null)
+        {
+            page.MetaDescription = request.MetaDescription;
+        }
+
+        if (request.MetaKeywords != null)
+        {
+            page.MetaKeywords = request.MetaKeywords;
+        }
+
+        if (request.PageData != null)
+        {
+            page.PageData = request.PageData;
+        }
 
         await _pageRepository.UpdateAsync(page);
         _logger.LogInformation("Page updated successfully: {PageId}", id);
